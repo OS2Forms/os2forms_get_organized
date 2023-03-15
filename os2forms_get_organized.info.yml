@@ -1,0 +1,7 @@
+name: 'OS2Forms GetOrganized'
+type: module
+description: 'GetOrganized integration'
+package: OS2Forms
+core_version_requirement: ^9
+dependencies:
+  - drupal:webform
