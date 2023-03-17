@@ -45,7 +45,7 @@ final class ArchiveDocument extends JobTypeBase implements ContainerFactoryPlugi
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('os2forms_get_organized.archive_helper'),
+      $container->get(ArchiveHelper::class),
       $container->get('logger.factory')
     );
   }

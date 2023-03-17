@@ -2,7 +2,6 @@
 
 namespace Drupal\os2forms_get_organized\Helper;
 
-use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\os2forms_get_organized\Exception\ArchivingMethodException;
@@ -43,18 +42,18 @@ class ArchiveHelper {
   private ?Cases $caseService = NULL;
 
   /**
-   * The ConfigFactoryInterface.
-   *
-   * @var \Drupal\Core\Config\ConfigFactoryInterface
-   */
-  private ConfigFactoryInterface $config;
-
-  /**
    * The EntityTypeManagerInterface.
    *
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
   private EntityTypeManagerInterface $entityTypeManager;
+
+  /**
+   * The settings.
+   *
+   * @var \Drupal\os2forms_get_organized\Helper\Settings
+   */
+  private Settings $settings;
 
   /**
    * File element types.
@@ -70,9 +69,9 @@ class ArchiveHelper {
   /**
    * Constructs an ArchiveHelper object.
    */
-  public function __construct(ConfigFactoryInterface $config, EntityTypeManagerInterface $entityTypeManager) {
-    $this->config = $config;
+  public function __construct(EntityTypeManagerInterface $entityTypeManager, Settings $settings) {
     $this->entityTypeManager = $entityTypeManager;
+    $this->settings = $settings;
   }
 
   /**
@@ -114,10 +113,9 @@ class ArchiveHelper {
    * Sets up Client.
    */
   private function setupClient(): void {
-    $config = $this->config->get('os2forms_get_organized');
-    $username = $config->get('username');
-    $password = $config->get('password');
-    $baseUrl = $config->get('base_url');
+    $username = $this->settings->getUsername();
+    $password = $this->settings->getPassword();
+    $baseUrl = $this->settings->getBaseUrl();
 
     $this->client = new Client($username, $password, $baseUrl);
   }

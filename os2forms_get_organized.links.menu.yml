@@ -1,0 +1,5 @@
+os2forms_get_organized.admin.settings:
+  title: OS2Forms Get Organized
+  description: Configure the OS2Forms GetOrganized module
+  parent: system.admin_config_system
+  route_name: os2forms_get_organized.admin.settings

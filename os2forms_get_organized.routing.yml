@@ -1,0 +1,7 @@
+os2forms_get_organized.admin.settings:
+  path: '/admin/os2forms_get_organized/settings'
+  defaults:
+    _form: '\Drupal\os2forms_get_organized\Form\SettingsForm'
+    _title: 'GetOrganized settings'
+  requirements:
+    _permission: 'administer site configuration'

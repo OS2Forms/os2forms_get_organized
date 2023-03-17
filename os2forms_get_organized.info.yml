@@ -5,3 +5,5 @@ package: OS2Forms
 core_version_requirement: ^9
 dependencies:
   - drupal:webform
+  - drupal:advancedqueue
+configure: os2forms_get_organized.admin.settings

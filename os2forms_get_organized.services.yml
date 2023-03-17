@@ -1,6 +1,9 @@
 services:
-  os2forms_get_organized.archive_helper:
-    class: Drupal\os2forms_get_organized\Helper\ArchiveHelper
+  Drupal\os2forms_get_organized\Helper\Settings:
     arguments:
-      - '@config.factory'
+      - "@keyvalue"
+
+  Drupal\os2forms_get_organized\Helper\ArchiveHelper:
+    arguments:
       - '@entity_type.manager'
+      - '@Drupal\os2forms_get_organized\Helper\Settings'

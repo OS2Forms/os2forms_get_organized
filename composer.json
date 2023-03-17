@@ -20,7 +20,8 @@
     "require": {
         "itk-dev/getorganized-api-client-php": "^1.2",
         "drupal/webform": "^6.1",
-        "drupal/advancedqueue": "^1.0"
+        "drupal/advancedqueue": "^1.0",
+        "symfony/options-resolver": "^5.4"
     },
     "require-dev": {
         "dealerdirect/phpcodesniffer-composer-installer": "^1.0",
