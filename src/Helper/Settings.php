@@ -30,9 +30,9 @@ final class Settings {
    * Default setting values.
    *
    * @var array
-   * @phpstan-var array<string, string> $defaultSettings
+   * @phpstan-var array<string, string>
    */
-  private array $defaultSettings = [
+  private $defaultSettings = [
     SettingsForm::GET_ORGANIZED_USERNAME => '',
     SettingsForm::GET_ORGANIZED_PASSWORD => '',
     SettingsForm::GET_ORGANIZED_BASE_URL => '',
