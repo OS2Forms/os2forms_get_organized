@@ -9,13 +9,13 @@ composer require os2forms/os2forms_get_organized
 vendor/bin/drush pm:enable os2forms_get_organized
 ```
 
-## Configuration
+## Settings
 
-Configure GetOrganized `username`, `password` and `base url`
+Set GetOrganized `username`, `password` and `base url`
 on `/admin/os2forms_get_organized/settings`.
 
 You can also test that the provided
-configuration works on `/admin/os2forms_get_organized/settings`.
+details work on `/admin/os2forms_get_organized/settings`.
 
 ## Coding standards
 

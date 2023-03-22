@@ -11,7 +11,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 /**
  * General settings for os2forms_get_organized.
  */
-final class Settings {
+class Settings {
   /**
    * The store.
    *
