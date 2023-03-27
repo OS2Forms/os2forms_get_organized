@@ -13,7 +13,7 @@ use Symfony\Component\OptionsResolver\Exception\ExceptionInterface as OptionsRes
 /**
  * GetOrganized settings form.
  */
-final class SettingsForm extends FormBase {
+class SettingsForm extends FormBase {
   use StringTranslationTrait;
 
   public const GET_ORGANIZED_USERNAME = 'get_organized_username';
