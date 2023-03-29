@@ -1,0 +1,10 @@
+name: 'OS2Forms GetOrganized'
+type: module
+description: 'GetOrganized integration'
+package: OS2Forms
+core_version_requirement: ^9
+dependencies:
+  - drupal:webform
+  - drupal:advancedqueue
+  - drupal:webform_entity_print_attachment
+configure: os2forms_get_organized.admin.settings

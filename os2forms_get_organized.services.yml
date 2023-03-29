@@ -1,0 +1,9 @@
+services:
+  Drupal\os2forms_get_organized\Helper\Settings:
+    arguments:
+      - "@keyvalue"
+
+  Drupal\os2forms_get_organized\Helper\ArchiveHelper:
+    arguments:
+      - '@entity_type.manager'
+      - '@Drupal\os2forms_get_organized\Helper\Settings'

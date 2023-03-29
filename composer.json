@@ -1,0 +1,57 @@
+{
+    "name": "os2forms/os2forms_get_organized",
+    "description": "OS2Forms GetOrganized integration",
+    "type": "drupal-module",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Jeppe Kuhlmann Andersen",
+            "email": "jekua@aarhus.dk"
+        }
+    ],
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://packages.drupal.org/8"
+        }
+    ],
+    "require": {
+        "itk-dev/getorganized-api-client-php": "^1.2",
+        "drupal/webform": "^6.1",
+        "drupal/advancedqueue": "^1.0",
+        "symfony/options-resolver": "^5.4"
+    },
+    "require-dev": {
+        "dealerdirect/phpcodesniffer-composer-installer": "^1.0",
+        "drupal/coder": "^8.3",
+        "mglaman/drupal-check": "^1.4"
+    },
+    "scripts": {
+        "code-analysis/drupal-check": [
+            "# @see https://github.com/mglaman/drupal-check/issues/261#issuecomment-1030141772 for details on exclude-dir value",
+            "drupal-check --deprecations --analysis --exclude-dir='vendor,*/Client/*' *.* src"
+        ],
+        "code-analysis": [
+            "@code-analysis/drupal-check"
+        ],
+        "coding-standards-check/phpcs": [
+            "vendor/bin/phpcs --standard=phpcs.xml.dist"
+        ],
+        "coding-standards-check": [
+            "@coding-standards-check/phpcs"
+        ],
+        "coding-standards-apply/phpcs": [
+            "vendor/bin/phpcbf --standard=phpcs.xml.dist"
+        ],
+        "coding-standards-apply": [
+            "@coding-standards-apply/phpcs"
+        ]
+    },
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
+    }
+}
