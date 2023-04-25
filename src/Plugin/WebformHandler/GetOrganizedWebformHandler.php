@@ -284,6 +284,7 @@ class GetOrganizedWebformHandler extends WebformHandlerBase {
   /**
    * Get available elements by type.
    *
+   * @phpstan-param array $types
    * @phpstan-param array<string, mixed> $elements
    * @phpstan-return array<string, mixed>
    */
