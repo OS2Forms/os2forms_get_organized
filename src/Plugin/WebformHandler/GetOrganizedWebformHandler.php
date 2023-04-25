@@ -107,7 +107,7 @@ class GetOrganizedWebformHandler extends WebformHandlerBase {
     $form['general']['attachment_element'] = [
       '#type' => 'select',
       '#title' => $this->t('Attachment element'),
-      '#options' => $this->getAvailableElementsByType('webform_entity_print_attachment:pdf', $elements),
+      '#options' => $this->getAvailableElementsByType(['webform_entity_print_attachment:pdf'], $elements),
       '#default_value' => $this->configuration['general']['attachment_element'] ?? '',
       '#description' => $this->t('Choose the element responsible for creating response attachments.'),
       '#required' => TRUE,
@@ -168,7 +168,10 @@ class GetOrganizedWebformHandler extends WebformHandlerBase {
     $form['choose_archiving_method']['cpr_value_element'] = [
       '#type' => 'select',
       '#title' => $this->t('CPR element'),
-      '#options' => $this->getAvailableElementsByType('cpr_value_element', $elements),
+      '#options' => $this->getAvailableElementsByType([
+        'cpr_value_element',
+        'textfield',
+      ], $elements),
       '#default_value' => $this->configuration['choose_archiving_method']['cpr_value_element'] ?? '',
       '#description' => $this->t('Choose the element containing CPR number'),
       '#size' => 5,
@@ -187,7 +190,10 @@ class GetOrganizedWebformHandler extends WebformHandlerBase {
     $form['choose_archiving_method']['cpr_name_element'] = [
       '#type' => 'select',
       '#title' => $this->t('CPR element'),
-      '#options' => $this->getAvailableElementsByType('cpr_name_element', $elements),
+      '#options' => $this->getAvailableElementsByType([
+        'cpr_name_element',
+        'textfield',
+      ], $elements),
       '#default_value' => $this->configuration['choose_archiving_method']['cpr_name_element'] ?? '',
       '#description' => $this->t('Choose the element containing CPR name'),
       '#size' => 5,
@@ -281,13 +287,13 @@ class GetOrganizedWebformHandler extends WebformHandlerBase {
    * @phpstan-param array<string, mixed> $elements
    * @phpstan-return array<string, mixed>
    */
-  private function getAvailableElementsByType(string $type, array $elements): array {
-    $attachmentElements = array_filter($elements, function ($element) use ($type) {
-      return $type === $element['#type'];
+  private function getAvailableElementsByType(array $types, array $elements): array {
+    $attachmentElements = array_filter($elements, function ($element) use ($types) {
+        return in_array($element['#type'], $types);
     });
 
     return array_map(function ($element) {
-      return $element['#title'];
+        return $element['#title'];
     }, $attachmentElements);
   }
 

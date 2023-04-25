@@ -214,6 +214,10 @@ class ArchiveHelper {
 
     if (0 === $parentCaseCount) {
       $parentCaseId = $this->createCitizenCase($cprElementValue, $cprNameElementValue);
+      if (empty($parentCaseId)) {
+        $message = sprintf('Could not create citizen case');
+        throw new CitizenArchivingException($message);
+      }
     }
     elseif (1 < $parentCaseCount) {
       $message = sprintf('Too many (%d) parent cases.', $parentCaseCount);
