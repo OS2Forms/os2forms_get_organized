@@ -289,6 +289,9 @@ class ArchiveHelper {
 
     $response = $this->caseService->createCase(self::CITIZEN_CASE_TYPE_PREFIX, $metadataArray);
 
+    if (empty($response)) {
+      throw new CitizenArchivingException('Could not create citizen case');
+    }
     // Example response.
     // {"CaseID":"BOR-2022-000046","CaseRelativeUrl":"\/cases\/BOR12\/BOR-2022-000046",...}.
     return $response['CaseID'];
