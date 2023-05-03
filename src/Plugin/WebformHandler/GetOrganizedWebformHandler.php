@@ -169,8 +169,9 @@ class GetOrganizedWebformHandler extends WebformHandlerBase {
       '#type' => 'select',
       '#title' => $this->t('CPR element'),
       '#options' => $this->getAvailableElementsByType([
-        'cpr_value_element',
         'textfield',
+        'os2forms_nemid_cpr',
+        'cpr_value_element',
       ], $elements),
       '#default_value' => $this->configuration['choose_archiving_method']['cpr_value_element'] ?? '',
       '#description' => $this->t('Choose the element containing CPR number'),
@@ -191,8 +192,9 @@ class GetOrganizedWebformHandler extends WebformHandlerBase {
       '#type' => 'select',
       '#title' => $this->t('CPR element'),
       '#options' => $this->getAvailableElementsByType([
-        'cpr_name_element',
         'textfield',
+        'os2forms_nemid_name',
+        'cpr_name_element',
       ], $elements),
       '#default_value' => $this->configuration['choose_archiving_method']['cpr_name_element'] ?? '',
       '#description' => $this->t('Choose the element containing CPR name'),
