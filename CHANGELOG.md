@@ -8,6 +8,8 @@ about writing changes to this log.
 
 ## [Unreleased]
 
+## [1.1.1] 03.05.2023
+
 * Updated GO handler config to allow new nemid elements
   (<https://github.com/OS2Forms/os2forms_get_organized/pull/4>).
 
@@ -18,6 +20,7 @@ about writing changes to this log.
 
 ## [1.0.0] 29.03.2023
 
-[Unreleased]: https://github.com/OS2Forms/os2forms_get_organized/compare/1.1.0...HEAD
+[Unreleased]: https://github.com/OS2Forms/os2forms_get_organized/compare/1.1.1...HEAD
+[1.1.1]: https://github.com/OS2Forms/os2forms_get_organized/compare/1.1.0...1.1.1
 [1.1.0]: https://github.com/OS2Forms/os2forms_get_organized/compare/1.0.0...1.1.0
 [1.0.0]: https://github.com/OS2Forms/os2forms_get_organized/releases/tag/1.0.0
