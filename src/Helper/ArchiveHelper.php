@@ -466,7 +466,11 @@ class ArchiveHelper {
     $webformLabel = $submission->getWebform()->label();
     $submissionNumber = $submission->serial();
 
-    return substr_replace($filename, '-' . $webformLabel . '-' . $submissionNumber, strrpos($filename, '.' . $fileExtension), 0);
+    // Find position of last occurrence of extension
+    $position = strrpos($filename, '.' . $fileExtension);
+
+    // Inject the webform label and submission number at found position.
+    return substr_replace($filename, '-' . $webformLabel . '-' . $submissionNumber, $position, 0);
   }
 
 }
