@@ -8,6 +8,9 @@ about writing changes to this log.
 
 ## [Unreleased]
 
+* Updated GO file naming strategy
+  (<https://github.com/OS2Forms/os2forms_get_organized/pull/6>).
+
 ## [1.1.1] 03.05.2023
 
 * Updated GO handler config to allow new nemid elements
