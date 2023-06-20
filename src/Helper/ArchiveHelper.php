@@ -329,20 +329,19 @@ class ArchiveHelper {
     $pdfExtension = '.pdf';
 
     if ($webformAttachmentElement['#filename']) {
-      if ($webformAttachmentElement['#type'] === 'webform_entity_print_attachment:pdf') {
-        $baseName = WebformAttachmentBase::getFileName($webformAttachmentElement, $submission);
-        $getOrganizedFileName = substr_replace($baseName, '-' . $webformLabel . '-' . $submission->serial(), strrpos($baseName, $pdfExtension), 0);
-      }
-    }
+      // Computes webform attachment's file name.
+      $baseName = WebformAttachmentBase::getFileName($webformAttachmentElement, $submission);
 
-    if (!isset($getOrganizedFileName)) {
-      $getOrganizedFileName = $webformLabel . '-' . $submission->serial() . $pdfExtension;
+      $getOrganizedFilename = $this->computeGetOrganizedFilename($baseName, $submission);
+    }
+    else {
+      $getOrganizedFilename = $webformLabel . '-' . $submission->serial() . $pdfExtension;
     }
 
     // Ids that should possibly be finalized (journaliseret) later.
     $documentIdsForFinalizing = [];
 
-    $parentDocumentId = $this->archiveDocumentToGetOrganizedCase($caseId, $getOrganizedFileName, $fileContent);
+    $parentDocumentId = $this->archiveDocumentToGetOrganizedCase($caseId, $getOrganizedFilename, $fileContent);
 
     $documentIdsForFinalizing[] = $parentDocumentId;
 
@@ -358,12 +357,11 @@ class ArchiveHelper {
         /** @var \Drupal\file\Entity\File $file */
         $file = $fileStorage->load($fileId);
         $filename = $file->getFilename();
-        $fileExtension = pathinfo($filename, PATHINFO_EXTENSION);
+        $getOrganizedFilename = $this->computeGetOrganizedFilename($filename, $submission);
+
         $fileContent = file_get_contents($file->getFileUri());
 
-        $getOrganizedFileName = substr_replace($filename, '-' . $webformLabel . '-' . $submission->serial(), strrpos($filename, '.' . $fileExtension), 0);
-
-        $childDocumentId = $this->archiveDocumentToGetOrganizedCase($caseId, $getOrganizedFileName, $fileContent);
+        $childDocumentId = $this->archiveDocumentToGetOrganizedCase($caseId, $getOrganizedFilename, $fileContent);
 
         $childDocumentIds[] = $childDocumentId;
       }
@@ -451,6 +449,24 @@ class ArchiveHelper {
     }
 
     return array_merge(...$fileIds);
+  }
+
+  /**
+   * Convert filename into GetOrganized filename.
+   *
+   * Adds webform label and submission number before its file extension.
+   *
+   * Example:
+   *
+   * Input: SomeFilename.pdf
+   * Output: SomeFilename-[FORMULAR_LABEL]-[SUBMISSION_NUMBER].pdf
+   */
+  private function computeGetOrganizedFilename(string $filename, WebformSubmission $submission): string {
+    $fileExtension = pathinfo($filename, PATHINFO_EXTENSION);
+    $webformLabel = $submission->getWebform()->label();
+    $submissionNumber = $submission->serial();
+
+    return substr_replace($filename, '-' . $webformLabel . '-' . $submissionNumber, strrpos($filename, '.' . $fileExtension), 0);
   }
 
 }
