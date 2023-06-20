@@ -466,7 +466,7 @@ class ArchiveHelper {
     $webformLabel = $submission->getWebform()->label();
     $submissionNumber = $submission->serial();
 
-    // Find position of last occurrence of extension
+    // Find position of last occurrence of extension.
     $position = strrpos($filename, '.' . $fileExtension);
 
     // Inject the webform label and submission number at found position.
