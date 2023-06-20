@@ -8,6 +8,7 @@ use Drupal\os2forms_get_organized\Exception\ArchivingMethodException;
 use Drupal\os2forms_get_organized\Exception\CitizenArchivingException;
 use Drupal\os2forms_get_organized\Exception\GetOrganizedCaseIdException;
 use Drupal\webform\Entity\WebformSubmission;
+use Drupal\webform_attachment\Element\WebformAttachmentBase;
 use Drupal\webform_entity_print_attachment\Element\WebformEntityPrintAttachment;
 use ItkDev\GetOrganized\Client;
 use ItkDev\GetOrganized\Service\Cases;
@@ -199,7 +200,7 @@ class ArchiveHelper {
       $caseQuery
     );
 
-    // Subcases may also contain contain the 'ows_CCMContactData_CPR' property,
+    // Subcases may also contain the 'ows_CCMContactData_CPR' property,
     // i.e. we need to check result cases are not subcases.
     // $caseResult will always contain the 'CasesInfo' key,
     // and its value will always be an array.
@@ -322,15 +323,24 @@ class ArchiveHelper {
    */
   private function uploadDocumentToCase(string $caseId, string $webformAttachmentElementId, WebformSubmission $submission, bool $shouldArchiveFiles, bool $shouldBeFinalized): void {
     // Handle main document (the attachment).
-    $element = $submission->getWebform()->getElement($webformAttachmentElementId);
-    $fileContent = WebformEntityPrintAttachment::getFileContent($element, $submission);
-
-    // Ids that should possibly be finalized (jornaliseret) later.
-    $documentIdsForFinalizing = [];
-
-    // Create temp file with attachment-element contents.
+    $webformAttachmentElement = $submission->getWebform()->getElement($webformAttachmentElementId);
+    $fileContent = WebformEntityPrintAttachment::getFileContent($webformAttachmentElement, $submission);
     $webformLabel = $submission->getWebform()->label();
-    $getOrganizedFileName = $webformLabel . '-' . $submission->serial() . '.pdf';
+    $pdfExtension = '.pdf';
+
+    if ($webformAttachmentElement['#filename']) {
+      if ($webformAttachmentElement['#type'] === 'webform_entity_print_attachment:pdf') {
+        $baseName = WebformAttachmentBase::getFileName($webformAttachmentElement, $submission);
+        $getOrganizedFileName = substr_replace($baseName, '-' . $webformLabel . '-' . $submission->serial(), strrpos($baseName, $pdfExtension), 0);
+      }
+    }
+
+    if (!isset($getOrganizedFileName)) {
+      $getOrganizedFileName = $webformLabel . '-' . $submission->serial() . $pdfExtension;
+    }
+
+    // Ids that should possibly be finalized (journaliseret) later.
+    $documentIdsForFinalizing = [];
 
     $parentDocumentId = $this->archiveDocumentToGetOrganizedCase($caseId, $getOrganizedFileName, $fileContent);
 
@@ -347,9 +357,11 @@ class ArchiveHelper {
       foreach ($fileIds as $fileId) {
         /** @var \Drupal\file\Entity\File $file */
         $file = $fileStorage->load($fileId);
-
+        $filename = $file->getFilename();
+        $fileExtension = pathinfo($filename, PATHINFO_EXTENSION);
         $fileContent = file_get_contents($file->getFileUri());
-        $getOrganizedFileName = $webformLabel . '-' . $submission->serial() . '-' . $file->getFilename();
+
+        $getOrganizedFileName = substr_replace($filename, '-' . $webformLabel . '-' . $submission->serial(), strrpos($filename, '.' . $fileExtension), 0);
 
         $childDocumentId = $this->archiveDocumentToGetOrganizedCase($caseId, $getOrganizedFileName, $fileContent);
 
