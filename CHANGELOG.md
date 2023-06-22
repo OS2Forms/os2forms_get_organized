@@ -8,6 +8,8 @@ about writing changes to this log.
 
 ## [Unreleased]
 
+## [1.1.1] 22.06.2023
+
 * Updated GO file naming strategy
   (<https://github.com/OS2Forms/os2forms_get_organized/pull/6>).
 
@@ -23,7 +25,8 @@ about writing changes to this log.
 
 ## [1.0.0] 29.03.2023
 
-[Unreleased]: https://github.com/OS2Forms/os2forms_get_organized/compare/1.1.1...HEAD
+[Unreleased]: https://github.com/OS2Forms/os2forms_get_organized/compare/1.1.2...HEAD
+[1.1.2]: https://github.com/OS2Forms/os2forms_get_organized/compare/1.1.1...1.1.2
 [1.1.1]: https://github.com/OS2Forms/os2forms_get_organized/compare/1.1.0...1.1.1
 [1.1.0]: https://github.com/OS2Forms/os2forms_get_organized/compare/1.0.0...1.1.0
 [1.0.0]: https://github.com/OS2Forms/os2forms_get_organized/releases/tag/1.0.0
