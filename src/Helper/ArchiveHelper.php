@@ -8,6 +8,7 @@ use Drupal\os2forms_get_organized\Exception\ArchivingMethodException;
 use Drupal\os2forms_get_organized\Exception\CitizenArchivingException;
 use Drupal\os2forms_get_organized\Exception\GetOrganizedCaseIdException;
 use Drupal\webform\Entity\WebformSubmission;
+use Drupal\webform_attachment\Element\WebformAttachmentBase;
 use Drupal\webform_entity_print_attachment\Element\WebformEntityPrintAttachment;
 use ItkDev\GetOrganized\Client;
 use ItkDev\GetOrganized\Service\Cases;
@@ -199,7 +200,7 @@ class ArchiveHelper {
       $caseQuery
     );
 
-    // Subcases may also contain contain the 'ows_CCMContactData_CPR' property,
+    // Subcases may also contain the 'ows_CCMContactData_CPR' property,
     // i.e. we need to check result cases are not subcases.
     // $caseResult will always contain the 'CasesInfo' key,
     // and its value will always be an array.
@@ -322,17 +323,25 @@ class ArchiveHelper {
    */
   private function uploadDocumentToCase(string $caseId, string $webformAttachmentElementId, WebformSubmission $submission, bool $shouldArchiveFiles, bool $shouldBeFinalized): void {
     // Handle main document (the attachment).
-    $element = $submission->getWebform()->getElement($webformAttachmentElementId);
-    $fileContent = WebformEntityPrintAttachment::getFileContent($element, $submission);
+    $webformAttachmentElement = $submission->getWebform()->getElement($webformAttachmentElementId);
+    $fileContent = WebformEntityPrintAttachment::getFileContent($webformAttachmentElement, $submission);
+    $webformLabel = $submission->getWebform()->label();
+    $pdfExtension = '.pdf';
 
-    // Ids that should possibly be finalized (jornaliseret) later.
+    if ($webformAttachmentElement['#filename']) {
+      // Computes webform attachment's file name.
+      $baseName = WebformAttachmentBase::getFileName($webformAttachmentElement, $submission);
+
+      $getOrganizedFilename = $this->computeGetOrganizedFilename($baseName, $submission);
+    }
+    else {
+      $getOrganizedFilename = $webformLabel . '-' . $submission->serial() . $pdfExtension;
+    }
+
+    // Ids that should possibly be finalized (journaliseret) later.
     $documentIdsForFinalizing = [];
 
-    // Create temp file with attachment-element contents.
-    $webformLabel = $submission->getWebform()->label();
-    $getOrganizedFileName = $webformLabel . '-' . $submission->serial() . '.pdf';
-
-    $parentDocumentId = $this->archiveDocumentToGetOrganizedCase($caseId, $getOrganizedFileName, $fileContent);
+    $parentDocumentId = $this->archiveDocumentToGetOrganizedCase($caseId, $getOrganizedFilename, $fileContent);
 
     $documentIdsForFinalizing[] = $parentDocumentId;
 
@@ -347,11 +356,12 @@ class ArchiveHelper {
       foreach ($fileIds as $fileId) {
         /** @var \Drupal\file\Entity\File $file */
         $file = $fileStorage->load($fileId);
+        $filename = $file->getFilename();
+        $getOrganizedFilename = $this->computeGetOrganizedFilename($filename, $submission);
 
         $fileContent = file_get_contents($file->getFileUri());
-        $getOrganizedFileName = $webformLabel . '-' . $submission->serial() . '-' . $file->getFilename();
 
-        $childDocumentId = $this->archiveDocumentToGetOrganizedCase($caseId, $getOrganizedFileName, $fileContent);
+        $childDocumentId = $this->archiveDocumentToGetOrganizedCase($caseId, $getOrganizedFilename, $fileContent);
 
         $childDocumentIds[] = $childDocumentId;
       }
@@ -439,6 +449,28 @@ class ArchiveHelper {
     }
 
     return array_merge(...$fileIds);
+  }
+
+  /**
+   * Convert filename into GetOrganized filename.
+   *
+   * Adds webform label and submission number before its file extension.
+   *
+   * Example:
+   *
+   * Input: SomeFilename.pdf
+   * Output: SomeFilename-[FORMULAR_LABEL]-[SUBMISSION_NUMBER].pdf
+   */
+  private function computeGetOrganizedFilename(string $filename, WebformSubmission $submission): string {
+    $fileExtension = pathinfo($filename, PATHINFO_EXTENSION);
+    $webformLabel = $submission->getWebform()->label();
+    $submissionNumber = $submission->serial();
+
+    // Find position of last occurrence of extension.
+    $position = strrpos($filename, '.' . $fileExtension);
+
+    // Inject the webform label and submission number at found position.
+    return substr_replace($filename, '-' . $webformLabel . '-' . $submissionNumber, $position, 0);
   }
 
 }
