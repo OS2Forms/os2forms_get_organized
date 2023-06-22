@@ -8,7 +8,7 @@ about writing changes to this log.
 
 ## [Unreleased]
 
-## [1.1.1] 22.06.2023
+## [1.1.2] 22.06.2023
 
 * Updated GO file naming strategy
   (<https://github.com/OS2Forms/os2forms_get_organized/pull/6>).
