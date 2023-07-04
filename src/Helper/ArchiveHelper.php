@@ -4,6 +4,7 @@ namespace Drupal\os2forms_get_organized\Helper;
 
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\File\Event\FileUploadSanitizeNameEvent;
 use Drupal\os2forms_get_organized\Exception\ArchivingMethodException;
 use Drupal\os2forms_get_organized\Exception\CitizenArchivingException;
 use Drupal\os2forms_get_organized\Exception\GetOrganizedCaseIdException;
@@ -13,6 +14,7 @@ use Drupal\webform_entity_print_attachment\Element\WebformEntityPrintAttachment;
 use ItkDev\GetOrganized\Client;
 use ItkDev\GetOrganized\Service\Cases;
 use ItkDev\GetOrganized\Service\Documents;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Helper for archiving documents in GetOrganized.
@@ -50,6 +52,13 @@ class ArchiveHelper {
   private EntityTypeManagerInterface $entityTypeManager;
 
   /**
+   * The EventDispatcherInterface.
+   *
+   * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
+   */
+  private EventDispatcherInterface $eventDispatcher;
+
+  /**
    * The settings.
    *
    * @var \Drupal\os2forms_get_organized\Helper\Settings
@@ -70,9 +79,10 @@ class ArchiveHelper {
   /**
    * Constructs an ArchiveHelper object.
    */
-  public function __construct(EntityTypeManagerInterface $entityTypeManager, Settings $settings) {
-    $this->entityTypeManager = $entityTypeManager;
-    $this->settings = $settings;
+  public function __construct(EntityTypeManagerInterface $entityTypeManager, EventDispatcherInterface $eventDispatcher, Settings $settings) {
+      $this->entityTypeManager = $entityTypeManager;
+      $this->eventDispatcher = $eventDispatcher;
+      $this->settings = $settings;
   }
 
   /**
@@ -329,7 +339,7 @@ class ArchiveHelper {
     $webformLabel = str_replace('/', '-', $webformLabel);
     $pdfExtension = '.pdf';
 
-    if ($webformAttachmentElement['#filename']) {
+    if (isset($webformAttachmentElement['#filename'])) {
       // Computes webform attachment's file name.
       $baseName = WebformAttachmentBase::getFileName($webformAttachmentElement, $submission);
 
@@ -341,6 +351,8 @@ class ArchiveHelper {
 
     // Ids that should possibly be finalized (journaliseret) later.
     $documentIdsForFinalizing = [];
+
+    $getOrganizedFilename = $this->sanitizeFilename($getOrganizedFilename);
 
     $parentDocumentId = $this->archiveDocumentToGetOrganizedCase($caseId, $getOrganizedFilename, $fileContent);
 
@@ -359,6 +371,7 @@ class ArchiveHelper {
         $file = $fileStorage->load($fileId);
         $filename = $file->getFilename();
         $getOrganizedFilename = $this->computeGetOrganizedFilename($filename, $submission);
+        $getOrganizedFilename = $this->sanitizeFilename($getOrganizedFilename);
 
         $fileContent = file_get_contents($file->getFileUri());
 
@@ -465,6 +478,7 @@ class ArchiveHelper {
   private function computeGetOrganizedFilename(string $filename, WebformSubmission $submission): string {
     $fileExtension = pathinfo($filename, PATHINFO_EXTENSION);
     $webformLabel = $submission->getWebform()->label();
+    $webformLabel = str_replace('/', '-', $webformLabel);
     $submissionNumber = $submission->serial();
 
     // Find position of last occurrence of extension.
@@ -474,4 +488,17 @@ class ArchiveHelper {
     return substr_replace($filename, '-' . $webformLabel . '-' . $submissionNumber, $position, 0);
   }
 
+  /**
+   * Sanitizes filename.
+   */
+  private function sanitizeFilename(string $filename): string
+  {
+    // @see https://www.drupal.org/node/3032541
+    // We just want to sanitize filename, therefore the empty string in allowed_extensions.
+    $event = new FileUploadSanitizeNameEvent($filename, '');
+
+    $this->eventDispatcher->dispatch($event);
+
+    return $event->getFilename();
+  }
 }

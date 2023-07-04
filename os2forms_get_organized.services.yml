@@ -6,4 +6,5 @@ services:
   Drupal\os2forms_get_organized\Helper\ArchiveHelper:
     arguments:
       - '@entity_type.manager'
+      - '@event_dispatcher'
       - '@Drupal\os2forms_get_organized\Helper\Settings'
