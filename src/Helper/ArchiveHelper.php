@@ -80,9 +80,9 @@ class ArchiveHelper {
    * Constructs an ArchiveHelper object.
    */
   public function __construct(EntityTypeManagerInterface $entityTypeManager, EventDispatcherInterface $eventDispatcher, Settings $settings) {
-      $this->entityTypeManager = $entityTypeManager;
-      $this->eventDispatcher = $eventDispatcher;
-      $this->settings = $settings;
+    $this->entityTypeManager = $entityTypeManager;
+    $this->eventDispatcher = $eventDispatcher;
+    $this->settings = $settings;
   }
 
   /**
@@ -491,14 +491,15 @@ class ArchiveHelper {
   /**
    * Sanitizes filename.
    */
-  private function sanitizeFilename(string $filename): string
-  {
+  private function sanitizeFilename(string $filename): string {
     // @see https://www.drupal.org/node/3032541
-    // We just want to sanitize filename, therefore the empty string in allowed_extensions.
+    // We just want to sanitize filename,
+    // hence the empty string in allowed_extensions.
     $event = new FileUploadSanitizeNameEvent($filename, '');
 
     $this->eventDispatcher->dispatch($event);
 
     return $event->getFilename();
   }
+
 }
