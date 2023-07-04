@@ -8,6 +8,8 @@ about writing changes to this log.
 
 ## [Unreleased]
 
+## [1.1.3] 04.07.2023
+
 * Sanitized GetOrganized filenames.
   (<https://github.com/OS2Forms/os2forms_get_organized/pull/8>)
 
@@ -28,7 +30,8 @@ about writing changes to this log.
 
 ## [1.0.0] 29.03.2023
 
-[Unreleased]: https://github.com/OS2Forms/os2forms_get_organized/compare/1.1.2...HEAD
+[Unreleased]: https://github.com/OS2Forms/os2forms_get_organized/compare/1.1.3...HEAD
+[1.1.3]: https://github.com/OS2Forms/os2forms_get_organized/compare/1.1.2...1.1.3
 [1.1.2]: https://github.com/OS2Forms/os2forms_get_organized/compare/1.1.1...1.1.2
 [1.1.1]: https://github.com/OS2Forms/os2forms_get_organized/compare/1.1.0...1.1.1
 [1.1.0]: https://github.com/OS2Forms/os2forms_get_organized/compare/1.0.0...1.1.0
