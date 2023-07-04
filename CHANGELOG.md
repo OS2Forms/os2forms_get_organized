@@ -8,7 +8,7 @@ about writing changes to this log.
 
 ## [Unreleased]
 
-* Replaced slashes from webform labels in GetOrganized filenames.
+* Sanitized GetOrganized filenames.
   (<https://github.com/OS2Forms/os2forms_get_organized/pull/8>)
 
 ## [1.1.2] 22.06.2023
