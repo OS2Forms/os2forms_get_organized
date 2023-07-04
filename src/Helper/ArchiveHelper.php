@@ -326,6 +326,7 @@ class ArchiveHelper {
     $webformAttachmentElement = $submission->getWebform()->getElement($webformAttachmentElementId);
     $fileContent = WebformEntityPrintAttachment::getFileContent($webformAttachmentElement, $submission);
     $webformLabel = $submission->getWebform()->label();
+    $webformLabel = str_replace('/', '-', $webformLabel);
     $pdfExtension = '.pdf';
 
     if ($webformAttachmentElement['#filename']) {
