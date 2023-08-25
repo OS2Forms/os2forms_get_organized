@@ -8,6 +8,8 @@ about writing changes to this log.
 
 ## [Unreleased]
 
+* Allowed `os2forms_attachment` attachment element.
+
 ## [1.1.3] 04.07.2023
 
 * Sanitized GetOrganized filenames.
