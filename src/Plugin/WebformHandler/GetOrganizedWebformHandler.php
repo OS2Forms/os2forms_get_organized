@@ -107,7 +107,10 @@ class GetOrganizedWebformHandler extends WebformHandlerBase {
     $form['general']['attachment_element'] = [
       '#type' => 'select',
       '#title' => $this->t('Attachment element'),
-      '#options' => $this->getAvailableElementsByType(['webform_entity_print_attachment:pdf'], $elements),
+      '#options' => $this->getAvailableElementsByType([
+        'webform_entity_print_attachment:pdf',
+        'os2forms_attachment',
+      ], $elements),
       '#default_value' => $this->configuration['general']['attachment_element'] ?? '',
       '#description' => $this->t('Choose the element responsible for creating response attachments.'),
       '#required' => TRUE,
