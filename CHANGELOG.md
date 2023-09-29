@@ -8,6 +8,8 @@ about writing changes to this log.
 
 ## [Unreleased]
 
+## [1.1.4] 29.09.2023
+
 * Allowed `os2forms_attachment` attachment element.
 
 ## [1.1.3] 04.07.2023
@@ -32,7 +34,8 @@ about writing changes to this log.
 
 ## [1.0.0] 29.03.2023
 
-[Unreleased]: https://github.com/OS2Forms/os2forms_get_organized/compare/1.1.3...HEAD
+[Unreleased]: https://github.com/OS2Forms/os2forms_get_organized/compare/1.1.4...HEAD
+[1.1.4]: https://github.com/OS2Forms/os2forms_get_organized/compare/1.1.3...1.1.4
 [1.1.3]: https://github.com/OS2Forms/os2forms_get_organized/compare/1.1.2...1.1.3
 [1.1.2]: https://github.com/OS2Forms/os2forms_get_organized/compare/1.1.1...1.1.2
 [1.1.1]: https://github.com/OS2Forms/os2forms_get_organized/compare/1.1.0...1.1.1
