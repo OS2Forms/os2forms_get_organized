@@ -7,4 +7,5 @@ dependencies:
   - drupal:webform
   - drupal:advancedqueue
   - drupal:webform_entity_print_attachment
+  - os2forms:os2forms_attachment
 configure: os2forms_get_organized.admin.settings

@@ -5,12 +5,12 @@ namespace Drupal\os2forms_get_organized\Helper;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\File\Event\FileUploadSanitizeNameEvent;
+use Drupal\os2forms_attachment\Element\AttachmentElement;
 use Drupal\os2forms_get_organized\Exception\ArchivingMethodException;
 use Drupal\os2forms_get_organized\Exception\CitizenArchivingException;
 use Drupal\os2forms_get_organized\Exception\GetOrganizedCaseIdException;
 use Drupal\webform\Entity\WebformSubmission;
 use Drupal\webform_attachment\Element\WebformAttachmentBase;
-use Drupal\webform_entity_print_attachment\Element\WebformEntityPrintAttachment;
 use ItkDev\GetOrganized\Client;
 use ItkDev\GetOrganized\Service\Cases;
 use ItkDev\GetOrganized\Service\Documents;
@@ -334,7 +334,7 @@ class ArchiveHelper {
   private function uploadDocumentToCase(string $caseId, string $webformAttachmentElementId, WebformSubmission $submission, bool $shouldArchiveFiles, bool $shouldBeFinalized): void {
     // Handle main document (the attachment).
     $webformAttachmentElement = $submission->getWebform()->getElement($webformAttachmentElementId);
-    $fileContent = WebformEntityPrintAttachment::getFileContent($webformAttachmentElement, $submission);
+    $fileContent = AttachmentElement::getFileContent($webformAttachmentElement, $submission);
     $webformLabel = $submission->getWebform()->label();
     $webformLabel = str_replace('/', '-', $webformLabel);
     $pdfExtension = '.pdf';

@@ -21,7 +21,8 @@
         "itk-dev/getorganized-api-client-php": "^1.2",
         "drupal/webform": "^6.1",
         "drupal/advancedqueue": "^1.0",
-        "symfony/options-resolver": "^5.4"
+        "symfony/options-resolver": "^5.4",
+        "os2forms/os2forms": "^3.13"
     },
     "require-dev": {
         "dealerdirect/phpcodesniffer-composer-installer": "^1.0",
@@ -51,7 +52,10 @@
     },
     "config": {
         "allow-plugins": {
-            "dealerdirect/phpcodesniffer-composer-installer": true
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "zaporylie/composer-drupal-optimizations": true,
+            "cweagans/composer-patches": true,
+            "simplesamlphp/composer-module-installer": true
         }
     }
 }

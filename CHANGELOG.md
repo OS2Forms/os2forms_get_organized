@@ -8,6 +8,9 @@ about writing changes to this log.
 
 ## [Unreleased]
 
+* Disallowed `webform_entity_print_attachment:pdf` attachment element.
+* Called correct `getFileContent` method.
+
 ## [1.1.4] 29.09.2023
 
 * Allowed `os2forms_attachment` attachment element.
