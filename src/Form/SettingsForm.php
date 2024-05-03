@@ -2,45 +2,57 @@
 
 namespace Drupal\os2forms_get_organized\Form;
 
-use Drupal\Core\Form\FormBase;
+use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\os2forms_get_organized\Helper\Settings;
-use ItkDev\GetOrganized\Client;
+use Drupal\os2forms_get_organized\Helper\ArchiveHelper;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\OptionsResolver\Exception\ExceptionInterface as OptionsResolverException;
 
 /**
  * GetOrganized settings form.
  */
-class SettingsForm extends FormBase {
+class SettingsForm extends ConfigFormBase {
   use StringTranslationTrait;
 
-  public const GET_ORGANIZED_USERNAME = 'get_organized_username';
-  public const GET_ORGANIZED_PASSWORD = 'get_organized_password';
+  public const CONFIG_NAME = 'os2forms_get_organized.settings';
+
   public const GET_ORGANIZED_BASE_URL = 'get_organized_base_url';
+  public const KEY = 'key';
 
-  /**
-   * The settings.
-   *
-   * @var \Drupal\os2forms_get_organized\Helper\Settings
-   */
-  private Settings $settings;
-
-  /**
-   * Constructor.
-   */
-  public function __construct(Settings $settings) {
-    $this->settings = $settings;
-  }
+  public const ACTION_PING_API = 'action_ping_api';
 
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container): SettingsForm {
+  public function __construct(
+    ConfigFactoryInterface $config_factory,
+    private readonly ArchiveHelper $helper,
+  ) {
+    parent::__construct($config_factory);
+  }
+
+  /**
+   * {@inheritdoc}
+   *
+   * @phpstan-return self
+   */
+  public static function create(ContainerInterface $container): self {
     return new static(
-      $container->get(Settings::class),
+      $container->get('config.factory'),
+      $container->get(ArchiveHelper::class)
     );
+  }
+
+  /**
+   * {@inheritdoc}
+   *
+   * @phpstan-return array<string>
+   */
+  protected function getEditableConfigNames() {
+    return [
+      self::CONFIG_NAME,
+    ];
   }
 
   /**
@@ -57,40 +69,38 @@ class SettingsForm extends FormBase {
    * @phpstan-return array<string, mixed>
    */
   public function buildForm(array $form, FormStateInterface $form_state): array {
+    $form = parent::buildForm($form, $form_state);
+    $config = $this->config(self::CONFIG_NAME);
 
-    $form[self::GET_ORGANIZED_USERNAME] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('Username'),
-      '#required' => TRUE,
-      '#default_value' => $this->settings->getUsername(),
-    ];
-
-    $form[self::GET_ORGANIZED_PASSWORD] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('Password'),
-      '#required' => TRUE,
-      '#default_value' => $this->settings->getPassword(),
+    $form[self::KEY] = [
+      '#type' => 'key_select',
+      '#key_filters' => [
+        'type' => 'user_password',
+      ],
+      '#title' => $this->t('Key'),
+      '#default_value' => $config->get(self::KEY),
     ];
 
     $form[self::GET_ORGANIZED_BASE_URL] = [
       '#type' => 'textfield',
       '#title' => $this->t('GetOrganized base url'),
       '#required' => TRUE,
-      '#default_value' => $this->settings->getBaseUrl(),
+      '#default_value' => $config->get(self::GET_ORGANIZED_BASE_URL),
       '#description' => $this->t('GetOrganized base url. Example: "https://ad.go.aarhuskommune.dk/_goapi"'),
     ];
 
-    $form['actions']['#type'] = 'actions';
+    $form['actions']['ping_api'] = [
+      '#type' => 'container',
 
-    $form['actions']['submit'] = [
-      '#type' => 'submit',
-      '#value' => $this->t('Save settings'),
-    ];
+      self::ACTION_PING_API => [
+        '#type' => 'submit',
+        '#name' => self::ACTION_PING_API,
+        '#value' => $this->t('Ping API'),
+      ],
 
-    $form['actions']['testSettings'] = [
-      '#type' => 'submit',
-      '#name' => 'testSettings',
-      '#value' => $this->t('Test provided information'),
+      'message' => [
+        '#markup' => $this->t('Note: Pinging the API will used saved config.'),
+      ],
     ];
 
     return $form;
@@ -101,55 +111,41 @@ class SettingsForm extends FormBase {
    *
    * @phpstan-param array<string, mixed> $form
    */
-  public function submitForm(array &$form, FormStateInterface $formState): void {
-    $username = $formState->getValue(self::GET_ORGANIZED_USERNAME);
-    $password = $formState->getValue(self::GET_ORGANIZED_PASSWORD);
-    $baseUrl = $formState->getValue(self::GET_ORGANIZED_BASE_URL);
-
-    $triggeringElement = $formState->getTriggeringElement();
-    if ('testSettings' === ($triggeringElement['#name'] ?? NULL)) {
-      $this->testSettings($username, $password, $baseUrl);
+  public function validateForm(array &$form, FormStateInterface $form_state): void {
+    if (self::ACTION_PING_API === ($form_state->getTriggeringElement()['#name'] ?? NULL)) {
       return;
     }
 
-    try {
-      $settings[self::GET_ORGANIZED_USERNAME] = $username;
-      $settings[self::GET_ORGANIZED_PASSWORD] = $password;
-      $settings[self::GET_ORGANIZED_BASE_URL] = $baseUrl;
-
-      $this->settings->setSettings($settings);
-      $this->messenger()->addStatus($this->t('Settings saved'));
-    }
-    catch (OptionsResolverException $exception) {
-      $this->messenger()->addError($this->t('Settings not saved (@message)', ['@message' => $exception->getMessage()]));
-    }
-
-    $this->messenger()->addStatus($this->t('Settings saved'));
+    parent::validateForm($form, $form_state);
   }
 
   /**
-   * Test settings by making some arbitrary call to the GetOrganized API.
+   * {@inheritdoc}
+   *
+   * @phpstan-param array<string, mixed> $form
    */
-  private function testSettings(string $username, string $password, string $baseUrl): void {
-    try {
-      $client = new Client($username, $password, $baseUrl);
-      /** @var \ItkDev\GetOrganized\Service\Tiles $tileService */
-      $tileService = $client->api('tiles');
-
-      $result = $tileService->GetTilesNavigation();
-
-      if (empty($result)) {
-        $message = $this->t('Error occurred while testing the GetOrganized API with provided settings.');
-        $this->messenger()->addError($message);
+  public function submitForm(array &$form, FormStateInterface $form_state): void {
+    if (self::ACTION_PING_API === ($form_state->getTriggeringElement()['#name'] ?? NULL)) {
+      try {
+        $this->helper->pingApi();
+        $this->messenger()->addStatus($this->t('Pinged API successfully.'));
       }
-      else {
-        $this->messenger()->addStatus($this->t('Settings succesfully tested'));
+      catch (\Throwable $t) {
+        $this->messenger()->addError($this->t('Pinging API failed: @message', ['@message' => $t->getMessage()]));
       }
+      return;
     }
-    catch (\Throwable $throwable) {
-      $message = $this->t('Error testing provided information: %message', ['%message' => $throwable->getMessage()]);
-      $this->messenger()->addError($message);
+
+    $config = $this->config(self::CONFIG_NAME);
+    foreach ([
+      self::KEY,
+      self::GET_ORGANIZED_BASE_URL,
+    ] as $key) {
+      $config->set($key, $form_state->getValue($key));
     }
+    $config->save();
+
+    parent::submitForm($form, $form_state);
   }
 
 }

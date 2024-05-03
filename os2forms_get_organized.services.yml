@@ -1,7 +1,8 @@
 services:
   Drupal\os2forms_get_organized\Helper\Settings:
     arguments:
-      - "@keyvalue"
+      - "@config.factory"
+      - "@key.repository"
 
   Drupal\os2forms_get_organized\Helper\ArchiveHelper:
     arguments:

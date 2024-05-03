@@ -13,9 +13,13 @@ use Drupal\os2web_audit\Service\Logger;
 use Drupal\webform\Entity\WebformSubmission;
 use Drupal\webform_attachment\Element\WebformAttachmentBase;
 use ItkDev\GetOrganized\Client;
+use ItkDev\GetOrganized\ClientInterface;
 use ItkDev\GetOrganized\Service\Cases;
 use ItkDev\GetOrganized\Service\Documents;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\HttpClient\Exception\ClientException;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Helper for archiving documents in GetOrganized.
@@ -73,20 +77,15 @@ class ArchiveHelper {
    * @phpstan-param array<string, mixed> $handlerConfiguration
    */
   public function archive(string $submissionId, array $handlerConfiguration): void {
-    // Setup Client and services.
-    if (NULL === $this->client) {
-      $this->setupClient();
-    }
-
     if (NULL === $this->caseService) {
       /** @var \ItkDev\GetOrganized\Service\Cases $caseService */
-      $caseService = $this->client->api('cases');
+      $caseService = $this->client()->api('cases');
       $this->caseService = $caseService;
     }
 
     if (NULL === $this->documentService) {
       /** @var \ItkDev\GetOrganized\Service\Documents $docService */
-      $docService = $this->client->api('documents');
+      $docService = $this->client()->api('documents');
       $this->documentService = $docService;
     }
 
@@ -99,18 +98,44 @@ class ArchiveHelper {
     elseif ('archive_to_citizen' === $archivingMethod) {
       $this->archiveToCitizen($submissionId, $handlerConfiguration);
     }
+  }
 
+  /**
+   * Ping the Get Organized API.
+   *
+   * Interpret a 400 Bad Request response as a success.
+   *
+   * @throws \Throwable
+   */
+  public function pingApi(): void {
+    try {
+      /** @var \ItkDev\GetOrganized\Service\Documents $service */
+      $service = $this->client()->api('documents');
+      $request = new \ReflectionMethod($service, 'request');
+      $request->invoke($service, Request::METHOD_GET, '/');
+    }
+    catch (\Throwable $t) {
+      // Throw if it's not a 400 Bad Request exception.
+      if (!($t instanceof ClientException)
+        || Response::HTTP_BAD_REQUEST !== $t->getCode()) {
+        throw $t;
+      }
+    }
   }
 
   /**
    * Sets up Client.
    */
-  private function setupClient(): void {
-    $username = $this->settings->getUsername();
-    $password = $this->settings->getPassword();
-    $baseUrl = $this->settings->getBaseUrl();
+  private function client(): ClientInterface {
+    if (NULL === $this->client) {
+      $username = $this->settings->getUsername();
+      $password = $this->settings->getPassword();
+      $baseUrl = $this->settings->getBaseUrl();
 
-    $this->client = new Client($username, $password, $baseUrl);
+      $this->client = new Client($username, $password, $baseUrl);
+    }
+
+    return $this->client;
   }
 
   /**
@@ -159,10 +184,6 @@ class ArchiveHelper {
     // Step 1: Find/create parent case
     // Step 2: Find/create subcase
     // Step 3: Upload to subcase.
-    if (NULL === $this->client) {
-      $this->setupClient();
-    }
-
     /** @var \Drupal\webform\Entity\WebformSubmission $submission */
     $submission = $this->getSubmission($submissionId);
 
