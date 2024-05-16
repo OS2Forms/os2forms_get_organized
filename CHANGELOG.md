@@ -8,6 +8,9 @@ about writing changes to this log.
 
 ## [Unreleased]
 
+* [PR-1](https://github.com/itk-dev/os2forms_get_organized/pull/1)
+  Added support for os2web_key
+
 ## [1.1.5] 04.01.2024
 
 * Disallowed `webform_entity_print_attachment:pdf` attachment element.

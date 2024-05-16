@@ -1,0 +1,6 @@
+services:
+  Drupal\os2forms_get_organized\Drush\Commands\GetOrganizedTestCommands:
+    arguments:
+      - '@Drupal\os2forms_get_organized\Helper\ArchiveHelper'
+    tags:
+      - { name: drush.command }
