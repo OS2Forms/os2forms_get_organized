@@ -78,6 +78,7 @@ class SettingsForm extends ConfigFormBase {
         'type' => 'user_password',
       ],
       '#title' => $this->t('Key'),
+      '#required' => TRUE,
       '#default_value' => $config->get(self::KEY),
     ];
 
