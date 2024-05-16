@@ -478,7 +478,24 @@ class ArchiveHelper {
   private function computeGetOrganizedFilename(string $filename, WebformSubmission $submission): string {
     $fileExtension = pathinfo($filename, PATHINFO_EXTENSION);
     $webformLabel = $submission->getWebform()->label();
-    $webformLabel = str_replace('/', '-', $webformLabel);
+
+    // Remove non-allowed filename characters from webform label.
+    $nonAllowedCharacters = [
+      '\\',
+      '/',
+      ':',
+      '*',
+      '?',
+      '"',
+      '<',
+      '>',
+      '|',
+    ];
+
+    foreach ($nonAllowedCharacters as $character) {
+      $webformLabel = str_replace($character, '-', $webformLabel);
+    }
+
     $submissionNumber = $submission->serial();
 
     // Find position of last occurrence of extension.

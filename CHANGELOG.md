@@ -8,6 +8,8 @@ about writing changes to this log.
 
 ## [Unreleased]
 
+* Replace non allowed filename characters.
+
 ## [1.1.5] 04.01.2024
 
 * Disallowed `webform_entity_print_attachment:pdf` attachment element.
