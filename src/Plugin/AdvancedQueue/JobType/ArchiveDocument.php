@@ -60,7 +60,7 @@ class ArchiveDocument extends JobTypeBase implements ContainerFactoryPluginInter
     $plugin_id,
     $plugin_definition,
     ArchiveHelper $helper,
-    LoggerChannelFactoryInterface $loggerFactory
+    LoggerChannelFactoryInterface $loggerFactory,
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->helper = $helper;
