@@ -8,6 +8,10 @@ about writing changes to this log.
 
 ## [Unreleased]
 
+## [1.2.0] 05.07.2024
+
+* Drupal 10 compatibility
+
 ## [1.1.5] 04.01.2024
 
 * Disallowed `webform_entity_print_attachment:pdf` attachment element.
@@ -39,7 +43,8 @@ about writing changes to this log.
 
 ## [1.0.0] 29.03.2023
 
-[Unreleased]: https://github.com/OS2Forms/os2forms_get_organized/compare/1.1.5...HEAD
+[Unreleased]: https://github.com/OS2Forms/os2forms_get_organized/compare/1.2.0...HEAD
+[1.2.0]: https://github.com/OS2Forms/os2forms_get_organized/compare/1.1.5...1.2.0
 [1.1.5]: https://github.com/OS2Forms/os2forms_get_organized/compare/1.1.4...1.1.5
 [1.1.4]: https://github.com/OS2Forms/os2forms_get_organized/compare/1.1.3...1.1.4
 [1.1.3]: https://github.com/OS2Forms/os2forms_get_organized/compare/1.1.2...1.1.3
