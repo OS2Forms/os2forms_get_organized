@@ -8,6 +8,8 @@ about writing changes to this log.
 
 ## [Unreleased]
 
+* Added audit logging.
+
 ## [1.2.0] 05.07.2024
 
 * Drupal 10 compatibility
