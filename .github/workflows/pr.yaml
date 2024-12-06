@@ -113,26 +113,30 @@ jobs:
         run: |
           # We need a Drupal project to run drupal-check (cf. https://github.com/mglaman/drupal-check#usage)
           # Install Drupal
-          composer --no-interaction create-project drupal/recommended-project:^9 --stability=dev drupal
+          composer --no-interaction create-project drupal/recommended-project:^10 --stability=dev drupal
           # Copy our module source code into the Drupal module folder.
           mkdir -p drupal/web/modules/contrib/os2forms_get_organized
           cp -r os2forms_get_organized.* composer.json src drupal/web/modules/contrib/os2forms_get_organized
+
+          # Allow all plugins
+          composer --working-dir=drupal config --no-plugins allow-plugins true
+
           # Add our module as a composer repository.
-          composer --no-interaction --working-dir=drupal config repositories.os2forms/os2forms_get_organized path web/modules/contrib/os2forms_get_organized
+          composer --working-dir=drupal --no-interaction config --append repositories.os2forms/os2forms_get_organized path web/modules/contrib/os2forms_get_organized
+
           # Restore Drupal composer repository.
           composer --no-interaction --working-dir=drupal config repositories.drupal composer https://packages.drupal.org/8
 
-          composer --no-interaction --working-dir=drupal config --no-plugins allow-plugins.cweagans/composer-patches true
-          composer --no-interaction --working-dir=drupal config --no-plugins allow-plugins.zaporylie/composer-drupal-optimizations true
-          composer --no-interaction --working-dir=drupal config --no-plugins allow-plugins.simplesamlphp/composer-module-installer true
-          # @see https://getcomposer.org/doc/03-cli.md#modifying-extra-values
-          composer --no-interaction --working-dir=drupal config --no-plugins --json extra.enable-patching true
+          # Make Drupal 10 compatible
+          composer --working-dir=drupal --no-interaction require psr/http-message:^1.0
+          composer --working-dir=drupal --no-interaction require 'mglaman/composer-drupal-lenient'
+          composer --working-dir=drupal config --no-plugins --merge --json extra.drupal-lenient.allowed-list '["drupal/coc_forms_auto_export", "drupal/webform_node_element"]'
 
           # Require our module.
-          composer --no-interaction --working-dir=drupal require 'os2forms/os2forms_get_organized:*'
+          composer --working-dir=drupal --no-interaction require 'os2forms/os2forms_get_organized:*'
 
           # Check code
-          composer --no-interaction --working-dir=drupal require --dev drupal/core-dev
+          composer --working-dir=drupal --no-interaction require --dev drupal/core-dev
           cd drupal/web/modules/contrib/os2forms_get_organized
           # Remove our non-dev dependencies to prevent duplicated Drupal installation
           # PHP Fatal error:  Cannot redeclare drupal_get_filename() (previously declared in /home/runner/work/os2forms_get_organized/os2forms_get_organized/drupal/web/modules/contrib/os2forms_get_organized/vendor/drupal/core/includes/bootstrap.inc:190) in /home/runner/work/os2forms_get_organized/os2forms_get_organized/drupal/web/core/includes/bootstrap.inc on line 190

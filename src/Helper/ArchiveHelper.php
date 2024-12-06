@@ -9,6 +9,7 @@ use Drupal\os2forms_attachment\Element\AttachmentElement;
 use Drupal\os2forms_get_organized\Exception\ArchivingMethodException;
 use Drupal\os2forms_get_organized\Exception\CitizenArchivingException;
 use Drupal\os2forms_get_organized\Exception\GetOrganizedCaseIdException;
+use Drupal\os2web_audit\Service\Logger;
 use Drupal\webform\Entity\WebformSubmission;
 use Drupal\webform_attachment\Element\WebformAttachmentBase;
 use ItkDev\GetOrganized\Client;
@@ -45,27 +46,6 @@ class ArchiveHelper {
   private ?Cases $caseService = NULL;
 
   /**
-   * The EntityTypeManagerInterface.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  private EntityTypeManagerInterface $entityTypeManager;
-
-  /**
-   * The EventDispatcherInterface.
-   *
-   * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
-   */
-  private EventDispatcherInterface $eventDispatcher;
-
-  /**
-   * The settings.
-   *
-   * @var \Drupal\os2forms_get_organized\Helper\Settings
-   */
-  private Settings $settings;
-
-  /**
    * File element types.
    */
   private const FILE_ELEMENT_TYPES = [
@@ -79,10 +59,12 @@ class ArchiveHelper {
   /**
    * Constructs an ArchiveHelper object.
    */
-  public function __construct(EntityTypeManagerInterface $entityTypeManager, EventDispatcherInterface $eventDispatcher, Settings $settings) {
-    $this->entityTypeManager = $entityTypeManager;
-    $this->eventDispatcher = $eventDispatcher;
-    $this->settings = $settings;
+  public function __construct(
+    private readonly EntityTypeManagerInterface $entityTypeManager,
+    private readonly EventDispatcherInterface $eventDispatcher,
+    private readonly Settings $settings,
+    private readonly Logger $auditLogger,
+  ) {
   }
 
   /**
@@ -303,9 +285,15 @@ class ArchiveHelper {
     if (empty($response)) {
       throw new CitizenArchivingException('Could not create citizen case');
     }
+
     // Example response.
     // {"CaseID":"BOR-2022-000046","CaseRelativeUrl":"\/cases\/BOR12\/BOR-2022-000046",...}.
-    return $response['CaseID'];
+    $caseId = $response['CaseID'];
+
+    $msg = sprintf('Created GetOrganized case %s', $caseId);
+    $this->auditLogger->info('GetOrganized', $msg);
+
+    return $caseId;
   }
 
   /**
@@ -325,7 +313,12 @@ class ArchiveHelper {
 
     // Example response.
     // {"CaseID":"BOR-2022-000046-001","CaseRelativeUrl":"\/cases\/BOR12\/BOR-2022-000046",...}.
-    return $response['CaseID'];
+    $caseId = $response['CaseID'];
+
+    $msg = sprintf('Created GetOrganized case %s', $caseId);
+    $this->auditLogger->info('GetOrganized', $msg);
+
+    return $caseId;
   }
 
   /**
@@ -382,11 +375,19 @@ class ArchiveHelper {
 
       $documentIdsForFinalizing = array_merge($documentIdsForFinalizing, $childDocumentIds);
 
-      $this->documentService->RelateDocuments($parentDocumentId, $childDocumentIds, 1);
+      if (!empty($childDocumentIds)) {
+        $this->documentService->RelateDocuments($parentDocumentId, $childDocumentIds, 1);
+
+        $msg = sprintf('Added relation between document %s and documents %s', $parentDocumentId, implode(', ', $childDocumentIds));
+        $this->auditLogger->info('GetOrganized', $msg);
+      }
     }
 
     if ($shouldBeFinalized) {
       $this->documentService->FinalizeMultiple($documentIdsForFinalizing);
+
+      $msg = sprintf('Finalized documents %s', implode(', ', $documentIdsForFinalizing));
+      $this->auditLogger->info('GetOrganized', $msg);
     }
   }
 
@@ -426,6 +427,9 @@ class ArchiveHelper {
       // Remove temp file.
       unlink($tempFile);
     }
+
+    $msg = sprintf('Archived document %s to GetOrganized case %s', $getOrganizedFileName, $caseId);
+    $this->auditLogger->info('GetOrganized', $msg);
 
     return (int) $documentId;
   }
