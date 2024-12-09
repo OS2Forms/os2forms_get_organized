@@ -206,7 +206,7 @@ class ArchiveHelper {
     $parentCaseCount = count($caseInfo);
 
     if (0 === $parentCaseCount) {
-      $parentCaseId = $this->createCitizenCase($cprElementValue, $cprNameElementValue);
+      $parentCaseId = $this->createCitizenCase($cprElementValue, $cprNameElementValue, $submission->getWebform()->id());
     }
     elseif (1 < $parentCaseCount) {
       $message = sprintf('Too many (%d) parent cases.', $parentCaseCount);
@@ -248,7 +248,7 @@ class ArchiveHelper {
     $subCaseCount = count($subCases['CasesInfo']);
 
     if (0 === $subCaseCount) {
-      $subCaseId = $this->createSubCase($parentCaseId, $subcaseName);
+      $subCaseId = $this->createSubCase($parentCaseId, $subcaseName, $submission->getWebform()->id());
     }
     elseif (1 === $subCaseCount) {
       $subCaseId = $subCases['CasesInfo'][0]['CaseID'];
@@ -269,7 +269,7 @@ class ArchiveHelper {
   /**
    * Creates citizen parent case in GetOrganized.
    */
-  private function createCitizenCase(string $cprElementValue, string $cprNameElementValue): string {
+  private function createCitizenCase(string $cprElementValue, string $cprNameElementValue, string $webformId): string {
 
     $metadataArray = [
       'ows_Title' => $cprElementValue . ' - ' . $cprNameElementValue,
@@ -290,7 +290,7 @@ class ArchiveHelper {
     // {"CaseID":"BOR-2022-000046","CaseRelativeUrl":"\/cases\/BOR12\/BOR-2022-000046",...}.
     $caseId = $response['CaseID'];
 
-    $msg = sprintf('Created GetOrganized case %s', $caseId);
+    $msg = sprintf('Created GetOrganized case %s. Webform id %s.', $caseId, $webformId);
     $this->auditLogger->info('GetOrganized', $msg);
 
     return $caseId;
@@ -299,7 +299,7 @@ class ArchiveHelper {
   /**
    * Creates citizen subcase in GetOrganized.
    */
-  private function createSubCase(string $caseId, string $caseName): string {
+  private function createSubCase(string $caseId, string $caseName, string $webformId): string {
     $metadataArray = [
       'ows_Title' => $caseName,
       'ows_CCMParentCase' => $caseId,
@@ -315,7 +315,7 @@ class ArchiveHelper {
     // {"CaseID":"BOR-2022-000046-001","CaseRelativeUrl":"\/cases\/BOR12\/BOR-2022-000046",...}.
     $caseId = $response['CaseID'];
 
-    $msg = sprintf('Created GetOrganized case %s', $caseId);
+    $msg = sprintf('Created GetOrganized case %s. Webform id %s.', $caseId, $webformId);
     $this->auditLogger->info('GetOrganized', $msg);
 
     return $caseId;
@@ -347,7 +347,7 @@ class ArchiveHelper {
 
     $getOrganizedFilename = $this->sanitizeFilename($getOrganizedFilename);
 
-    $parentDocumentId = $this->archiveDocumentToGetOrganizedCase($caseId, $getOrganizedFilename, $fileContent);
+    $parentDocumentId = $this->archiveDocumentToGetOrganizedCase($caseId, $getOrganizedFilename, $fileContent, $submission->getWebform()->id());
 
     $documentIdsForFinalizing[] = $parentDocumentId;
 
@@ -368,7 +368,7 @@ class ArchiveHelper {
 
         $fileContent = file_get_contents($file->getFileUri());
 
-        $childDocumentId = $this->archiveDocumentToGetOrganizedCase($caseId, $getOrganizedFilename, $fileContent);
+        $childDocumentId = $this->archiveDocumentToGetOrganizedCase($caseId, $getOrganizedFilename, $fileContent, $submission->getWebform()->id());
 
         $childDocumentIds[] = $childDocumentId;
       }
@@ -378,7 +378,7 @@ class ArchiveHelper {
       if (!empty($childDocumentIds)) {
         $this->documentService->RelateDocuments($parentDocumentId, $childDocumentIds, 1);
 
-        $msg = sprintf('Added relation between document %s and documents %s', $parentDocumentId, implode(', ', $childDocumentIds));
+        $msg = sprintf('Added relation between document %s and documents %s. Webform id %s.', $parentDocumentId, implode(', ', $childDocumentIds), $submission->getWebform()->id());
         $this->auditLogger->info('GetOrganized', $msg);
       }
     }
@@ -386,7 +386,7 @@ class ArchiveHelper {
     if ($shouldBeFinalized) {
       $this->documentService->FinalizeMultiple($documentIdsForFinalizing);
 
-      $msg = sprintf('Finalized documents %s', implode(', ', $documentIdsForFinalizing));
+      $msg = sprintf('Finalized documents %s. Webform id %s.', implode(', ', $documentIdsForFinalizing), $submission->getWebform()->id());
       $this->auditLogger->info('GetOrganized', $msg);
     }
   }
@@ -410,7 +410,7 @@ class ArchiveHelper {
   /**
    * Archives file content to GetOrganized case.
    */
-  private function archiveDocumentToGetOrganizedCase(string $caseId, string $getOrganizedFileName, string $fileContent): int {
+  private function archiveDocumentToGetOrganizedCase(string $caseId, string $getOrganizedFileName, string $fileContent, string $webformId): int {
     $tempFile = tempnam('/tmp', $caseId . '-' . uniqid());
 
     try {
@@ -428,7 +428,7 @@ class ArchiveHelper {
       unlink($tempFile);
     }
 
-    $msg = sprintf('Archived document %s to GetOrganized case %s', $getOrganizedFileName, $caseId);
+    $msg = sprintf('Archived document %s to GetOrganized case %s. Webform id %s.', $getOrganizedFileName, $caseId, $webformId);
     $this->auditLogger->info('GetOrganized', $msg);
 
     return (int) $documentId;
