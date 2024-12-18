@@ -28,11 +28,11 @@ class ArchiveCommands extends DrushCommands {
    *
    * @command os2forms:get-organized:archive
    */
-  public function archive(string $submissionId, string $handlerId) {
+  public function archive(string $submissionId, string $handlerId): void {
 
     $io = new SymfonyStyle($this->input(), $this->output());
 
-    /** @var \Drupal\webform\WebformSubmissionInterface $submission */
+    /** @var \Drupal\webform\WebformSubmissionInterface|null $submission */
     $submission = WebformSubmission::load($submissionId);
 
     if (!$submission) {
