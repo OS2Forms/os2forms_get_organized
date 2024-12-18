@@ -8,7 +8,7 @@ use Drush\Commands\DrushCommands;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
- * Drush command file.
+ * OS2Forms archive command.
  */
 class ArchiveCommands extends DrushCommands {
 
@@ -19,7 +19,7 @@ class ArchiveCommands extends DrushCommands {
   }
 
   /**
-   * A custom Drush command to displays the given text.
+   * A Drush command for archiving submission in GetOrganized.
    *
    * @param string $submissionId
    *   The submission id.
