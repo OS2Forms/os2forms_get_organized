@@ -8,6 +8,11 @@ about writing changes to this log.
 
 ## [Unreleased]
 
+## [1.4.0] 18.12.2024
+
+* Normalized white space in filename.
+* Added command for archiving submission.
+
 ## [1.3.1] 09.12.2024
 
 * Added webform ID to audit logging messages.
@@ -51,7 +56,8 @@ about writing changes to this log.
 
 ## [1.0.0] 29.03.2023
 
-[Unreleased]: https://github.com/OS2Forms/os2forms_get_organized/compare/1.3.1...HEAD
+[Unreleased]: https://github.com/OS2Forms/os2forms_get_organized/compare/1.4.0...HEAD
+[1.4.0]: https://github.com/OS2Forms/os2forms_get_organized/compare/1.3.1...1.4.0
 [1.3.1]: https://github.com/OS2Forms/os2forms_get_organized/compare/1.3.0...1.3.1
 [1.3.0]: https://github.com/OS2Forms/os2forms_get_organized/compare/1.2.0...1.3.0
 [1.2.0]: https://github.com/OS2Forms/os2forms_get_organized/compare/1.1.5...1.2.0

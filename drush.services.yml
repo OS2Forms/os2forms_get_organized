@@ -1,0 +1,7 @@
+services:
+  drush_command_example.commands:
+    class: \Drupal\os2forms_get_organized\Commands\ArchiveCommands
+    tags:
+      - { name: drush.command }
+    arguments:
+      - '@Drupal\os2forms_get_organized\Helper\ArchiveHelper'

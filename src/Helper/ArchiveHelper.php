@@ -489,7 +489,10 @@ class ArchiveHelper {
     $position = strrpos($filename, '.' . $fileExtension);
 
     // Inject the webform label and submission number at found position.
-    return substr_replace($filename, '-' . $webformLabel . '-' . $submissionNumber, $position, 0);
+    $filename = substr_replace($filename, '-' . $webformLabel . '-' . $submissionNumber, $position, 0);
+
+    // Normalize white space.
+    return preg_replace('/[[:space:]]/', ' ', $filename);
   }
 
   /**
