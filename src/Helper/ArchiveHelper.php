@@ -492,7 +492,7 @@ class ArchiveHelper {
     $filename = substr_replace($filename, '-' . $webformLabel . '-' . $submissionNumber, $position, 0);
 
     // Normalize white space.
-    return preg_replace('/[[:space:]]/', ' ', $filename);
+    return preg_replace('/[[:space:]]/', ' ', trim($filename));
   }
 
   /**
