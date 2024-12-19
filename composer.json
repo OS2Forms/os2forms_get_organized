@@ -18,7 +18,7 @@
         }
     ],
     "require": {
-        "itk-dev/getorganized-api-client-php": "^1.2",
+        "itk-dev/getorganized-api-client-php": "^1.2.2",
         "drupal/webform": "^6.2",
         "drupal/advancedqueue": "^1.2",
         "symfony/options-resolver": "^5.4 || ^6.0",
