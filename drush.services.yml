@@ -1,7 +1,12 @@
 services:
-  drush_command_example.commands:
-    class: \Drupal\os2forms_get_organized\Commands\ArchiveCommands
-    tags:
-      - { name: drush.command }
+  Drupal\os2forms_get_organized\Commands\ArchiveCommands:
     arguments:
       - '@Drupal\os2forms_get_organized\Helper\ArchiveHelper'
+    tags:
+      - { name: drush.command }
+
+  Drupal\os2forms_get_organized\Drush\Commands\GetOrganizedTestCommands:
+    arguments:
+      - '@Drupal\os2forms_get_organized\Helper\ArchiveHelper'
+    tags:
+      - { name: drush.command }

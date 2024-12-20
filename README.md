@@ -11,24 +11,39 @@ vendor/bin/drush pm:enable os2forms_get_organized
 
 ## Settings
 
-Set GetOrganized `username`, `password` and `base url`
-on `/admin/os2forms_get_organized/settings`.
-
-You can also test that the provided
-details work on `/admin/os2forms_get_organized/settings`.
+Go to `/admin/os2forms_get_organized/settings` and configure the module.
 
 ## Coding standards
 
-Check coding standards:
+Our coding are checked by GitHub Actions (cf. [.github/workflows/pr.yml](.github/workflows/pr.yml)). Use the commands
+below to run the checks locally.
 
-```sh
-docker run --rm --interactive --tty --volume ${PWD}:/app itkdev/php8.1-fpm:latest composer install
-docker run --rm --interactive --tty --volume ${PWD}:/app itkdev/php8.1-fpm:latest composer coding-standards-check
-```
-
-Apply coding standards:
+### PHP
 
 ```shell
-docker run --rm --interactive --tty --volume ${PWD}:/app itkdev/php8.1-fpm:latest composer coding-standards-apply
-docker run --rm --interactive --tty --volume ${PWD}:/app node:18 yarn --cwd /app coding-standards-apply
+# Update to make sure that we use the latest versions of tools.
+docker run --rm --volume ${PWD}:/app --workdir /app itkdev/php8.3-fpm composer update
+# Fix (some) coding standards issues
+docker run --rm --volume ${PWD}:/app --workdir /app itkdev/php8.3-fpm composer coding-standards-apply
+# Check that code adheres to the coding standards
+docker run --rm --volume ${PWD}:/app --workdir /app itkdev/php8.3-fpm composer coding-standards-check
+```
+
+### Markdown
+
+```shell
+docker pull peterdavehello/markdownlint
+docker run --rm --volume $PWD:/md peterdavehello/markdownlint markdownlint --ignore vendor --ignore LICENSE.md '**/*.md' --fix
+docker run --rm --volume $PWD:/md peterdavehello/markdownlint markdownlint --ignore vendor --ignore LICENSE.md '**/*.md'
+```
+
+## Code analysis
+
+We use [PHPStan](https://phpstan.org/) for static code analysis.
+
+Running statis code analysis on a standalone Drupal module is a bit tricky, so we use a helper script to run the
+analysis:
+
+```shell
+docker run --rm --volume ${PWD}:/app --workdir /app itkdev/php8.3-fpm ./scripts/code-analysis
 ```
