@@ -21,16 +21,18 @@ below to run the checks locally.
 ### PHP
 
 ```shell
-docker run --rm --volume ${PWD}:/app --workdir /app itkdev/php8.1-fpm composer install
+# Update to make sure that we use the latest versions of tools.
+docker run --rm --volume ${PWD}:/app --workdir /app itkdev/php8.3-fpm composer update
 # Fix (some) coding standards issues
-docker run --rm --volume ${PWD}:/app --workdir /app itkdev/php8.1-fpm composer coding-standards-apply
+docker run --rm --volume ${PWD}:/app --workdir /app itkdev/php8.3-fpm composer coding-standards-apply
 # Check that code adheres to the coding standards
-docker run --rm --volume ${PWD}:/app --workdir /app itkdev/php8.1-fpm composer coding-standards-check
+docker run --rm --volume ${PWD}:/app --workdir /app itkdev/php8.3-fpm composer coding-standards-check
 ```
 
 ### Markdown
 
 ```shell
+docker pull peterdavehello/markdownlint
 docker run --rm --volume $PWD:/md peterdavehello/markdownlint markdownlint --ignore vendor --ignore LICENSE.md '**/*.md' --fix
 docker run --rm --volume $PWD:/md peterdavehello/markdownlint markdownlint --ignore vendor --ignore LICENSE.md '**/*.md'
 ```
@@ -43,5 +45,5 @@ Running statis code analysis on a standalone Drupal module is a bit tricky, so w
 analysis:
 
 ```shell
-docker run --rm --volume ${PWD}:/app --workdir /app itkdev/php8.1-fpm ./scripts/code-analysis
+docker run --rm --volume ${PWD}:/app --workdir /app itkdev/php8.3-fpm ./scripts/code-analysis
 ```
