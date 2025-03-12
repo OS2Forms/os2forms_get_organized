@@ -22,7 +22,7 @@
         "drupal/webform": "^6.2",
         "drupal/advancedqueue": "^1.2",
         "symfony/options-resolver": "^5.4 || ^6.0",
-        "os2forms/os2forms": "^3.17"
+        "os2forms/os2forms": "^3.17 || ^4.0"
     },
     "require-dev": {
         "drupal/coder": "^8.3",
