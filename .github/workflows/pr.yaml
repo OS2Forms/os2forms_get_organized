@@ -50,6 +50,38 @@ jobs:
           # Check that dependencies resolve.
           composer update --${{ matrix.dependency-version }} --prefer-dist --no-interaction
 
+  test-composer-normalized:
+    name: Check that composer.json is normalized
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php-versions: [ '8.3' ]
+        dependency-version: [ prefer-lowest, prefer-stable ]
+    steps:
+      - uses: actions/checkout@master
+      - name: Setup PHP, with composer and extensions
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-versions }}
+          extensions: json
+          coverage: none
+          tools: composer:v2
+      # https://github.com/shivammathur/setup-php#cache-composer-dependencies
+      - name: Get composer cache directory
+        id: composer-cache
+        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
+      - name: Check that composer.json is normalized
+        run: |
+          composer install
+          # Check that dependencies resolve.
+          composer normalize --dry-run
+
   php-check-coding-standards:
     name: PHP - Check Coding Standards
     runs-on: ubuntu-latest
