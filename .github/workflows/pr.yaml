@@ -49,9 +49,6 @@ jobs:
           composer validate --strict composer.json
           # Check that dependencies resolve.
           composer update --${{ matrix.dependency-version }} --prefer-dist --no-interaction
-      - name: Check that composer file is normalized
-        run: |
-          composer normalize --dry-run
 
   test-composer-normalized:
     name: Check that composer.json is normalized

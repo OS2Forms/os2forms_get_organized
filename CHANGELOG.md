@@ -8,8 +8,8 @@ about writing changes to this log.
 
 ## [Unreleased]
 
-* [PR-1](https://github.com/itk-dev/os2forms_get_organized/pull/1)
-  Added support for os2web_key
+* [PR-14](https://github.com/OS2Forms/os2forms_get_organized/pull/14)
+  Added support for [Key](https://www.drupal.org/project/key)
 * [PR-22](https://github.com/OS2Forms/os2forms_get_organized/pull/22)
   Normalized `composer.json`
 
