@@ -176,3 +176,14 @@ jobs:
           sed -i '/^\s*"require":/,/^\s*}/d' composer.json
           composer --no-interaction install
           composer code-analysis
+
+  coding-standards-markdown:
+    name: Markdown coding standards
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+
+      - name: Coding standards
+        run: |
+          docker run --rm --volume $PWD:/md peterdavehello/markdownlint markdownlint --ignore vendor --ignore LICENSE.md '**/*.md'

@@ -11,6 +11,7 @@
     ],
     "require": {
         "drupal/advancedqueue": "^1.2",
+        "drupal/key": "^1.20",
         "drupal/webform": "^6.2",
         "itk-dev/getorganized-api-client-php": "^1.2.2",
         "os2forms/os2forms": "^3.17 || ^4.0",
