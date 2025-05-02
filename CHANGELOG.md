@@ -8,6 +8,9 @@ about writing changes to this log.
 
 ## [Unreleased]
 
+* [PR-22](https://github.com/OS2Forms/os2forms_get_organized/pull/22)
+  Normalized `composer.json`
+
 ## [1.4.1] 12.03.2025
 
 * Allowed `os2forms/os2forms` 4.0.

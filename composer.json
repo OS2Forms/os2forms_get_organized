@@ -1,63 +1,65 @@
 {
     "name": "os2forms/os2forms_get_organized",
     "description": "OS2Forms GetOrganized integration",
-    "type": "drupal-module",
     "license": "MIT",
+    "type": "drupal-module",
     "authors": [
         {
             "name": "Jeppe Kuhlmann Andersen",
             "email": "jekua@aarhus.dk"
         }
     ],
-    "minimum-stability": "dev",
-    "prefer-stable": true,
+    "require": {
+        "drupal/advancedqueue": "^1.2",
+        "drupal/webform": "^6.2",
+        "itk-dev/getorganized-api-client-php": "^1.2.2",
+        "os2forms/os2forms": "^3.17 || ^4.0",
+        "symfony/options-resolver": "^5.4 || ^6.0"
+    },
+    "require-dev": {
+        "dealerdirect/phpcodesniffer-composer-installer": "^0.7.1",
+        "drupal/coder": "^8.3",
+        "ergebnis/composer-normalize": "^2.47",
+        "mglaman/drupal-check": "^1.4",
+        "mglaman/phpstan-drupal": "~1.2.0"
+    },
     "repositories": [
         {
             "type": "composer",
             "url": "https://packages.drupal.org/8"
         }
     ],
-    "require": {
-        "itk-dev/getorganized-api-client-php": "^1.2.2",
-        "drupal/webform": "^6.2",
-        "drupal/advancedqueue": "^1.2",
-        "symfony/options-resolver": "^5.4 || ^6.0",
-        "os2forms/os2forms": "^3.17 || ^4.0"
-    },
-    "require-dev": {
-        "drupal/coder": "^8.3",
-        "dealerdirect/phpcodesniffer-composer-installer": "^0.7.1",
-        "mglaman/drupal-check": "^1.4",
-        "mglaman/phpstan-drupal": "~1.2.0"
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "config": {
+        "allow-plugins": {
+            "cweagans/composer-patches": true,
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "ergebnis/composer-normalize": true,
+            "mglaman/composer-drupal-lenient": true,
+            "simplesamlphp/composer-module-installer": true,
+            "zaporylie/composer-drupal-optimizations": true
+        }
     },
     "scripts": {
+        "code-analysis": [
+            "@code-analysis/drupal-check"
+        ],
         "code-analysis/drupal-check": [
             "# @see https://github.com/mglaman/drupal-check/issues/261#issuecomment-1030141772 for details on exclude-dir value",
             "drupal-check --deprecations --analysis --exclude-dir='vendor,*/Client/*' *.* src"
         ],
-        "code-analysis": [
-            "@code-analysis/drupal-check"
-        ],
-        "coding-standards-check/phpcs": [
-            "vendor/bin/phpcs --standard=phpcs.xml.dist"
-        ],
-        "coding-standards-check": [
-            "@coding-standards-check/phpcs"
+        "coding-standards-apply": [
+            "@coding-standards-apply/phpcs"
         ],
         "coding-standards-apply/phpcs": [
             "vendor/bin/phpcbf --standard=phpcs.xml.dist"
         ],
-        "coding-standards-apply": [
-            "@coding-standards-apply/phpcs"
+        "coding-standards-check": [
+            "@coding-standards-check/phpcs"
+        ],
+        "coding-standards-check/phpcs": [
+            "vendor/bin/phpcs --standard=phpcs.xml.dist"
         ]
-    },
-    "config": {
-        "allow-plugins": {
-            "dealerdirect/phpcodesniffer-composer-installer": true,
-            "zaporylie/composer-drupal-optimizations": true,
-            "cweagans/composer-patches": true,
-            "simplesamlphp/composer-module-installer": true,
-            "mglaman/composer-drupal-lenient": true
-        }
     }
 }
