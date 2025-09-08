@@ -8,6 +8,10 @@ about writing changes to this log.
 
 ## [Unreleased]
 
+## [1.4.2] 08.09.2025
+
+* Only attempt archiving when submission is completed.
+
 ## [1.4.1] 12.03.2025
 
 * Allowed `os2forms/os2forms` 4.0.
