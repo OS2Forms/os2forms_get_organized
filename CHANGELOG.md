@@ -8,6 +8,10 @@ about writing changes to this log.
 
 ## [Unreleased]
 
+## [2.0.1] 08.09.2025
+
+* Only attempt archiving when submission is completed.
+
 ## [2.0.0] - 2025-05-02
 
 * [PR-14](https://github.com/OS2Forms/os2forms_get_organized/pull/14)
@@ -68,7 +72,8 @@ about writing changes to this log.
 
 ## [1.0.0] 29.03.2023
 
-[Unreleased]: https://github.com/OS2Forms/os2forms_get_organized/compare/2.0.0...HEAD
+[Unreleased]: https://github.com/OS2Forms/os2forms_get_organized/compare/2.0.1...HEAD
+[2.0.1]: https://github.com/OS2Forms/os2forms_get_organized/compare/2.0.0...2.0.1
 [2.0.0]: https://github.com/OS2Forms/os2forms_get_organized/compare/1.4.1...2.0.0
 [1.4.1]: https://github.com/OS2Forms/os2forms_get_organized/compare/1.4.0...1.4.1
 [1.4.0]: https://github.com/OS2Forms/os2forms_get_organized/compare/1.3.1...1.4.0

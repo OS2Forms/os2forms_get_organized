@@ -264,6 +264,11 @@ class GetOrganizedWebformHandler extends WebformHandlerBase {
    * {@inheritdoc}
    */
   public function postSave(WebformSubmissionInterface $webform_submission, $update = TRUE): void {
+    // Ignore anything that is not completed.
+    if (!$webform_submission->isCompleted()) {
+      return;
+    }
+
     $queueStorage = $this->entityTypeManager->getStorage('advancedqueue_queue');
     /** @var \Drupal\advancedqueue\Entity\Queue $queue */
     $queue = $queueStorage->load('get_organized_queue');
