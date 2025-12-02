@@ -8,6 +8,9 @@ about writing changes to this log.
 
 ## [Unreleased]
 
+* Allowed `os2forms/os2forms` `5.x`.
+* Disallowed `os2forms/os2forms` `3.x`.
+
 ## [2.0.1] 08.09.2025
 
 * Only attempt archiving when submission is completed.
