@@ -8,6 +8,8 @@ about writing changes to this log.
 
 ## [Unreleased]
 
+## [2.1.0] 08.12.2025
+
 * Allowed `os2forms/os2forms` `5.x`.
 * Disallowed `os2forms/os2forms` `3.x`.
 
@@ -15,7 +17,7 @@ about writing changes to this log.
 
 * Only attempt archiving when submission is completed.
 
-## [2.0.0] - 2025-05-02
+## [2.0.0] 05.02.2025
 
 * [PR-14](https://github.com/OS2Forms/os2forms_get_organized/pull/14)
   Added support for [Key](https://www.drupal.org/project/key)
@@ -75,7 +77,8 @@ about writing changes to this log.
 
 ## [1.0.0] 29.03.2023
 
-[Unreleased]: https://github.com/OS2Forms/os2forms_get_organized/compare/2.0.1...HEAD
+[Unreleased]: https://github.com/OS2Forms/os2forms_get_organized/compare/2.1.0...HEAD
+[2.1.0]: https://github.com/OS2Forms/os2forms_get_organized/compare/2.0.1...2.1.0
 [2.0.1]: https://github.com/OS2Forms/os2forms_get_organized/compare/2.0.0...2.0.1
 [2.0.0]: https://github.com/OS2Forms/os2forms_get_organized/compare/1.4.1...2.0.0
 [1.4.1]: https://github.com/OS2Forms/os2forms_get_organized/compare/1.4.0...1.4.1
