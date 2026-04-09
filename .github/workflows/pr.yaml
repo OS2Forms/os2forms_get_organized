@@ -161,7 +161,7 @@ jobs:
 
           # Make Drupal 10 compatible
           composer --working-dir=drupal --no-interaction require psr/http-message:^1.0
-          composer --working-dir=drupal --no-interaction require 'mglaman/composer-drupal-lenient'
+          composer --working-dir=drupal --no-interaction require 'mglaman/composer-drupal-lenient':'^1.0'
           composer --working-dir=drupal config --no-plugins --merge --json extra.drupal-lenient.allowed-list '["drupal/coc_forms_auto_export", "drupal/webform_node_element"]'
 
           # Require our module.
