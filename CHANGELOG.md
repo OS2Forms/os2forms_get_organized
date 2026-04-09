@@ -8,6 +8,10 @@ about writing changes to this log.
 
 ## [Unreleased]
 
+## [2.1.1] 09.04.2026
+
+* Ensured static strings as first argument for logging calls.
+
 ## [2.1.0] 11.12.2025
 
 * Allowed `os2forms/os2forms` `5.x`.
@@ -77,7 +81,8 @@ about writing changes to this log.
 
 ## [1.0.0] 29.03.2023
 
-[Unreleased]: https://github.com/OS2Forms/os2forms_get_organized/compare/2.1.0...HEAD
+[Unreleased]: https://github.com/OS2Forms/os2forms_get_organized/compare/2.1.1...HEAD
+[2.1.1]: https://github.com/OS2Forms/os2forms_get_organized/compare/2.1.0...2.1.1
 [2.1.0]: https://github.com/OS2Forms/os2forms_get_organized/compare/2.0.1...2.1.0
 [2.0.1]: https://github.com/OS2Forms/os2forms_get_organized/compare/2.0.0...2.0.1
 [2.0.0]: https://github.com/OS2Forms/os2forms_get_organized/compare/1.4.1...2.0.0
