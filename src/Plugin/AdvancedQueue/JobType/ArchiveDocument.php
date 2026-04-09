@@ -85,15 +85,15 @@ class ArchiveDocument extends JobTypeBase implements ContainerFactoryPluginInter
 
       try {
         $this->helper->archive($payload['submissionId'], $payload['handlerConfiguration']);
-        $this->submissionLogger->notice('The submission #@serial was successfully delivered', $logger_context + ['@serial' => $webformSubmission->serial()]);
+        $this->submissionLogger->notice('The submission #@serial was successfully delivered', ['@serial' => $webformSubmission->serial()] + $logger_context);
 
         return JobResult::success();
       }
       catch (\Exception $e) {
-        $this->submissionLogger->error('The submission #@serial failed (@message)', $logger_context + [
+        $this->submissionLogger->error('The submission #@serial failed (@message)', [
           '@serial' => $webformSubmission->serial(),
           '@message' => $e->getMessage(),
-        ]);
+        ] + $logger_context);
 
         return JobResult::failure($e->getMessage());
       }
