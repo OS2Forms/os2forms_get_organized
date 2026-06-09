@@ -1,5 +1,7 @@
 # OS2Forms GetOrganized
 
+TEST
+
 Adds [GetOrganized](https://www.getorganized.net/) handler for archiving purposes.
 
 ## Installation
