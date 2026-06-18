@@ -5,6 +5,8 @@
  * Install hooks for os2forms_get_organized.
  */
 
+use Drupal\webform\WebformSubmissionInterface;
+
 /**
  * Implements hook_update_N().
  */

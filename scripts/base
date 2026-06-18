@@ -122,6 +122,10 @@ setup() {
   # Uncomment this line if you need to debug
   # shell bash
 
+  # Avoid 'The "node_type" plugin does not exist'
+  rm -f web/modules/contrib/os2forms/config/optional/pathauto.pattern.os2forms_wf_webforms.yml
+  rm -f web/modules/contrib/webform/modules/webform_demo/webform_demo_event_registration/config/optional/block.block.bartik_webform_demo_event_registration.yml
+
   # Finally, install our module.
   drush --yes pm:install "$module_name"
 }
