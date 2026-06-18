@@ -14,7 +14,6 @@ function os2forms_get_organized_update_9001(): void {
   ], TRUE);
 }
 
-
 /**
  * Set states config to completed on existing get organized handlers.
  */
