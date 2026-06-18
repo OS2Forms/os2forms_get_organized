@@ -41,9 +41,14 @@ docker run --rm --volume $PWD:/md peterdavehello/markdownlint markdownlint --ign
 
 We use [PHPStan](https://phpstan.org/) for static code analysis.
 
-Running statis code analysis on a standalone Drupal module is a bit tricky, so we use a helper script to run the
-analysis:
+Running static code analysis on a standalone Drupal module is a bit tricky, so we advise
+running it via your main OS2Forms Drupal project.
+
+To do so, copy the entire module folder into `web/sites/default/modules`, clear the cache and run:
 
 ```shell
-docker run --rm --volume ${PWD}:/app --workdir /app itkdev/php8.3-fpm ./scripts/code-analysis
+docker compose exec phpfpm php vendor/bin/phpstan --configuration=web/sites/default/modules/os2forms_get_organized/phpstan.neon
 ```
+
+Assuming your php container is named `phpfpm`.
+
