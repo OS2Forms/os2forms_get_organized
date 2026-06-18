@@ -51,4 +51,3 @@ docker compose exec phpfpm php vendor/bin/phpstan --configuration=web/sites/defa
 ```
 
 Assuming your php container is named `phpfpm`.
-
