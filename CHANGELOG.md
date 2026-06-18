@@ -8,6 +8,11 @@ about writing changes to this log.
 
 ## [Unreleased]
 
+## [2.2.0] 18.06.2026
+
+* Added the ability to configure on which submission states the handler should
+  run. The default option is to run on the completed state.
+
 ## [2.1.1] 09.04.2026
 
 * Ensured static strings as first argument for logging calls.
@@ -81,7 +86,8 @@ about writing changes to this log.
 
 ## [1.0.0] 29.03.2023
 
-[Unreleased]: https://github.com/OS2Forms/os2forms_get_organized/compare/2.1.1...HEAD
+[Unreleased]: https://github.com/OS2Forms/os2forms_get_organized/compare/2.2.0...HEAD
+[2.2.0]: https://github.com/OS2Forms/os2forms_get_organized/compare/2.1.1...2.2.0
 [2.1.1]: https://github.com/OS2Forms/os2forms_get_organized/compare/2.1.0...2.1.1
 [2.1.0]: https://github.com/OS2Forms/os2forms_get_organized/compare/2.0.1...2.1.0
 [2.0.1]: https://github.com/OS2Forms/os2forms_get_organized/compare/2.0.0...2.0.1
