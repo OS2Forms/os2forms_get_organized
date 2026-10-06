@@ -52,7 +52,7 @@ class ArchiveHelper {
   /**
    * File element types.
    */
-  private const FILE_ELEMENT_TYPES = [
+  private const array FILE_ELEMENT_TYPES = [
     'webform_image_file',
     'webform_document_file',
     'webform_video_file',
@@ -217,12 +217,11 @@ class ArchiveHelper {
     // i.e. we need to check result cases are not subcases.
     // $caseResult will always contain the 'CasesInfo' key,
     // and its value will always be an array.
-    $caseInfo = array_filter($caseResult['CasesInfo'], function ($caseInfo) {
-      // Parent cases are always on the form AAA-XXXX-XXXXXX,
-      // Subcases are always on the form AAA-XXXX-XXXXXX-XXX,
-      // I.e. we can filter out subcases by checking number of dashes in id.
-      return 2 === substr_count($caseInfo['CaseID'], '-');
-    });
+    $caseInfo = array_filter($caseResult['CasesInfo'], 
+        // Parent cases are always on the form AAA-XXXX-XXXXXX,
+        // Subcases are always on the form AAA-XXXX-XXXXXX-XXX,
+        // I.e. we can filter out subcases by checking number of dashes in id.
+        fn($caseInfo) => 2 === substr_count($caseInfo['CaseID'], '-'));
 
     $parentCaseCount = count($caseInfo);
 
@@ -419,13 +418,9 @@ class ArchiveHelper {
    * @phpstan-return array<string, mixed>
    */
   private function getAvailableElementsByType(string $type, array $elements): array {
-    $attachmentElements = array_filter($elements, function ($element) use ($type) {
-      return $type === $element['#type'];
-    });
+    $attachmentElements = array_filter($elements, fn($element) => $type === $element['#type']);
 
-    return array_map(function ($element) {
-      return $element['#title'];
-    }, $attachmentElements);
+    return array_map(fn($element) => $element['#title'], $attachmentElements);
   }
 
   /**

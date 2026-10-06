@@ -16,7 +16,7 @@ class Settings {
    *
    * @var \Drupal\Core\Config\ImmutableConfig
    */
-  private ImmutableConfig $config;
+  private readonly ImmutableConfig $config;
 
   /**
    * The constructor.
@@ -85,7 +85,7 @@ class Settings {
 
       return $values[$name] ?? NULL;
     }
-    catch (\Throwable $exception) {
+    catch (\Throwable) {
       return NULL;
     }
   }

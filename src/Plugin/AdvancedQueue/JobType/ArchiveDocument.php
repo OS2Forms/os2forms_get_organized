@@ -2,7 +2,6 @@
 
 namespace Drupal\os2forms_get_organized\Plugin\AdvancedQueue\JobType;
 
-use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\advancedqueue\Job;
@@ -22,13 +21,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class ArchiveDocument extends JobTypeBase implements ContainerFactoryPluginInterface {
   /**
-   * The archiving helper.
-   *
-   * @var \Drupal\os2forms_get_organized\Helper\ArchiveHelper
-   */
-  private ArchiveHelper $helper;
-
-  /**
    * The submission logger.
    *
    * @var \Drupal\Core\Logger\LoggerChannelInterface
@@ -46,7 +38,7 @@ class ArchiveDocument extends JobTypeBase implements ContainerFactoryPluginInter
       $plugin_id,
       $plugin_definition,
       $container->get(ArchiveHelper::class),
-      $container->get('logger.factory')
+      $container->get('logger.channel.webform_submission')
     );
   }
 
@@ -59,12 +51,11 @@ class ArchiveDocument extends JobTypeBase implements ContainerFactoryPluginInter
     array $configuration,
     $plugin_id,
     $plugin_definition,
-    ArchiveHelper $helper,
-    LoggerChannelFactoryInterface $loggerFactory,
+    protected readonly ArchiveHelper $helper,
+    LoggerChannelInterface $submissionLogger,
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
-    $this->helper = $helper;
-    $this->submissionLogger = $loggerFactory->get('webform_submission');
+    $this->submissionLogger = $submissionLogger;
   }
 
   /**
