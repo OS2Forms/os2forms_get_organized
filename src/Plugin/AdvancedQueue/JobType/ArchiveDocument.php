@@ -21,13 +21,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class ArchiveDocument extends JobTypeBase implements ContainerFactoryPluginInterface {
   /**
-   * The submission logger.
-   *
-   * @var \Drupal\Core\Logger\LoggerChannelInterface
-   */
-  protected LoggerChannelInterface $submissionLogger;
-
-  /**
    * {@inheritdoc}
    *
    * @phpstan-param array<string, mixed> $configuration
@@ -52,10 +45,9 @@ class ArchiveDocument extends JobTypeBase implements ContainerFactoryPluginInter
     $plugin_id,
     $plugin_definition,
     protected readonly ArchiveHelper $helper,
-    LoggerChannelInterface $submissionLogger,
+    protected LoggerChannelInterface $submissionLogger,
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
-    $this->submissionLogger = $submissionLogger;
   }
 
   /**

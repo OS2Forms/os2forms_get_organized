@@ -30,12 +30,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * )
  */
 class GetOrganizedWebformHandler extends WebformHandlerBase {
-  /**
-   * The submission logger.
-   *
-   * @var \Drupal\Core\Logger\LoggerChannelInterface
-   */
-  protected LoggerChannelInterface $submissionLogger;
   private const string ADDITIONAL = 'additional';
   private const string STATES = 'states';
 
@@ -44,7 +38,18 @@ class GetOrganizedWebformHandler extends WebformHandlerBase {
    *
    * @phpstan-param array<string, mixed> $configuration
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, LoggerChannelFactoryInterface $loggerFactory, ConfigFactoryInterface $configFactory, RendererInterface $renderer, EntityTypeManagerInterface $entityTypeManager, WebformSubmissionConditionsValidatorInterface $conditionsValidator, WebformTokenManagerInterface $tokenManager, LoggerChannelInterface $submissionLogger) {
+  public function __construct(
+    array $configuration,
+    $plugin_id,
+    $plugin_definition,
+    LoggerChannelFactoryInterface $loggerFactory,
+    ConfigFactoryInterface $configFactory,
+    RendererInterface $renderer,
+    EntityTypeManagerInterface $entityTypeManager,
+    WebformSubmissionConditionsValidatorInterface $conditionsValidator,
+    WebformTokenManagerInterface $tokenManager,
+    protected LoggerChannelInterface $submissionLogger
+  ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->setConfiguration($configuration);
     $this->loggerFactory = $loggerFactory;
@@ -53,7 +58,6 @@ class GetOrganizedWebformHandler extends WebformHandlerBase {
     $this->entityTypeManager = $entityTypeManager;
     $this->conditionsValidator = $conditionsValidator;
     $this->tokenManager = $tokenManager;
-    $this->submissionLogger = $submissionLogger;
   }
 
   /**
