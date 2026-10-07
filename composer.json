@@ -14,15 +14,15 @@
         "drupal/key": "^1.20",
         "drupal/webform": "^6.2",
         "itk-dev/getorganized-api-client-php": "^1.2.2",
-        "os2forms/os2forms": "^4.0 || ^5.0",
-        "symfony/options-resolver": "^5.4 || ^6.0"
+        "os2forms/os2forms": "^5.0 || ^6.0",
+        "symfony/options-resolver": "^6.4 || ^7.0"
     },
     "require-dev": {
         "dealerdirect/phpcodesniffer-composer-installer": "^0.7.1",
         "drupal/coder": "^8.3",
         "ergebnis/composer-normalize": "^2.47",
-        "mglaman/drupal-check": "^1.4",
-        "mglaman/phpstan-drupal": "~1.2.0"
+        "mglaman/phpstan-drupal": "^2.0",
+        "palantirnet/drupal-rector": "^1.0"
     },
     "repositories": [
         {
@@ -36,10 +36,23 @@
         "allow-plugins": {
             "cweagans/composer-patches": true,
             "dealerdirect/phpcodesniffer-composer-installer": true,
+            "drupal/core-composer-scaffold": true,
             "ergebnis/composer-normalize": true,
             "mglaman/composer-drupal-lenient": true,
             "simplesamlphp/composer-module-installer": true,
+            "simplesamlphp/composer-xmlprovider-installer": false,
+            "symfony/runtime": true,
             "zaporylie/composer-drupal-optimizations": true
+        }
+    },
+    "extra": {
+        "drupal-lenient": {
+            "allowed-list": [
+                "drupal/coc_forms_auto_export",
+                "drupal/webform_node_element",
+                "drupal/events_logging",
+                "drupal/switch_page_theme"
+            ]
         }
     },
     "scripts": {

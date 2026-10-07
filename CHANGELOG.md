@@ -8,6 +8,8 @@ about writing changes to this log.
 
 ## [Unreleased]
 
+* Drupal 11
+
 ## [2.2.0] 18.06.2026
 
 * Added the ability to configure on which submission states the handler should
