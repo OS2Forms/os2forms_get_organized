@@ -5,8 +5,8 @@ composer.lock
 .idea
 
 # DDEV stuff
-web/
-recipes/
+/web/
+/recipes/
 /.csslintrc
 /.eslintignore
 /.eslintrc.json
