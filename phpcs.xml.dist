@@ -11,7 +11,7 @@
   <exclude-pattern>vendor</exclude-pattern>
   <exclude-pattern>rector.php</exclude-pattern>
   <!-- DDEV -->
-  <exclude-pattern>web</exclude-pattern>
+  <exclude-pattern>Drupal</exclude-pattern>
 
   <arg value="p"/>
   <arg value="s"/>
