@@ -5,5 +5,5 @@ composer.lock
 .idea
 
 # DDEV stuff
-/Drupal/
+/web/
 /recipes/

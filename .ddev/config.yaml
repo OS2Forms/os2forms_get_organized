@@ -1,6 +1,6 @@
 name: os2forms-get-organized
 type: drupal11
-docroot: Drupal
+docroot: web
 php_version: "8.4"
 webserver_type: nginx-fpm
 xdebug_enabled: false
