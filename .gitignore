@@ -5,21 +5,5 @@ composer.lock
 .idea
 
 # DDEV stuff
-/web/
+/Drupal/
 /recipes/
-/.csslintrc
-/.eslintignore
-/.eslintrc.json
-/.ht.router.php
-/.htaccess
-/INSTALL.txt
-/autoload.php
-/autoload_runtime.php
-/example.gitignore
-/index.php
-/robots.txt
-/update.php
-modules/
-profiles/
-sites/
-themes/

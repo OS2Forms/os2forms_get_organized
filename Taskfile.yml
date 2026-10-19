@@ -114,7 +114,7 @@ tasks:
       - ddev add-on get ddev/ddev-drupal-contrib
       - ddev restart
       - task: composer:install:lenient
-      - ddev poser --no-interaction
+      - ddev poser --no-interaction --no-security-blocking
       - ddev symlink-project
       # Detect expected Drupal and PHP versions.
       - ddev config --update
