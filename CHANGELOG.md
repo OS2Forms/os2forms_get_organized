@@ -8,7 +8,7 @@ about writing changes to this log.
 
 ## [Unreleased]
 
-* Drupal 11
+* Added support for Drupal 11
 
 ## [2.2.0] 18.06.2026
 
