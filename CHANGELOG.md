@@ -8,6 +8,8 @@ about writing changes to this log.
 
 ## [Unreleased]
 
+## [2.3.0] 20.10.2026
+
 * Added support for Drupal 11
 
 ## [2.2.0] 18.06.2026
@@ -88,7 +90,8 @@ about writing changes to this log.
 
 ## [1.0.0] 29.03.2023
 
-[Unreleased]: https://github.com/OS2Forms/os2forms_get_organized/compare/2.2.0...HEAD
+[Unreleased]: https://github.com/OS2Forms/os2forms_get_organized/compare/2.3.0...HEAD
+[2.3.0]: https://github.com/OS2Forms/os2forms_get_organized/compare/2.2.0...2.3.0
 [2.2.0]: https://github.com/OS2Forms/os2forms_get_organized/compare/2.1.1...2.2.0
 [2.1.1]: https://github.com/OS2Forms/os2forms_get_organized/compare/2.1.0...2.1.1
 [2.1.0]: https://github.com/OS2Forms/os2forms_get_organized/compare/2.0.1...2.1.0
