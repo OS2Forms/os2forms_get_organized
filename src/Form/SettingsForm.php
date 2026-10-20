@@ -3,6 +3,7 @@
 namespace Drupal\os2forms_get_organized\Form;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Config\TypedConfigManagerInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
@@ -27,9 +28,10 @@ class SettingsForm extends ConfigFormBase {
    */
   public function __construct(
     ConfigFactoryInterface $config_factory,
-    private readonly ArchiveHelper $helper,
+    TypedConfigManagerInterface $typedConfigManager,
+    protected readonly ArchiveHelper $helper,
   ) {
-    parent::__construct($config_factory);
+    parent::__construct($config_factory, $typedConfigManager);
   }
 
   /**
@@ -37,9 +39,11 @@ class SettingsForm extends ConfigFormBase {
    *
    * @phpstan-return self
    */
+  #[\Override]
   public static function create(ContainerInterface $container): self {
     return new static(
       $container->get('config.factory'),
+      $container->get('config.typed'),
       $container->get(ArchiveHelper::class)
     );
   }
@@ -68,6 +72,7 @@ class SettingsForm extends ConfigFormBase {
    * @phpstan-param array<string, mixed> $form
    * @phpstan-return array<string, mixed>
    */
+  #[\Override]
   public function buildForm(array $form, FormStateInterface $form_state): array {
     $form = parent::buildForm($form, $form_state);
     $config = $this->config(self::CONFIG_NAME);
@@ -111,7 +116,9 @@ class SettingsForm extends ConfigFormBase {
    * {@inheritdoc}
    *
    * @phpstan-param array<string, mixed> $form
+   * @phpstan-param-out array<mixed> $form
    */
+  #[\Override]
   public function validateForm(array &$form, FormStateInterface $form_state): void {
     if (self::ACTION_PING_API === ($form_state->getTriggeringElement()['#name'] ?? NULL)) {
       return;
@@ -124,7 +131,9 @@ class SettingsForm extends ConfigFormBase {
    * {@inheritdoc}
    *
    * @phpstan-param array<string, mixed> $form
+   * @phpstan-param-out array<mixed> $form
    */
+  #[\Override]
   public function submitForm(array &$form, FormStateInterface $form_state): void {
     if (self::ACTION_PING_API === ($form_state->getTriggeringElement()['#name'] ?? NULL)) {
       try {

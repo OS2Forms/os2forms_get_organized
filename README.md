@@ -13,41 +13,21 @@ vendor/bin/drush pm:enable os2forms_get_organized
 
 Go to `/admin/os2forms_get_organized/settings` and configure the module.
 
-## Coding standards
+## Development
 
-Our coding are checked by GitHub Actions (cf. [.github/workflows/pr.yml](.github/workflows/pr.yml)). Use the commands
-below to run the checks locally.
+We use [DDEV Drupal Contrib](https://github.com/ddev/ddev-drupal-contrib) for development[^1].
 
-### PHP
+[^1]: The DDEV environment has been created by running
 
-```shell
-# Update to make sure that we use the latest versions of tools.
-docker run --rm --volume ${PWD}:/app --workdir /app itkdev/php8.3-fpm composer update
-# Fix (some) coding standards issues
-docker run --rm --volume ${PWD}:/app --workdir /app itkdev/php8.3-fpm composer coding-standards-apply
-# Check that code adheres to the coding standards
-docker run --rm --volume ${PWD}:/app --workdir /app itkdev/php8.3-fpm composer coding-standards-check
-```
+      ```shell
+      ddev config --project-type=drupal11 --docroot=web
+      ddev dotenv set .ddev/.env.web --drupal-core '^11.4.10'
+      ```
 
-### Markdown
+Start the show by running
 
 ```shell
-docker pull peterdavehello/markdownlint
-docker run --rm --volume $PWD:/md peterdavehello/markdownlint markdownlint --ignore vendor --ignore LICENSE.md '**/*.md' --fix
-docker run --rm --volume $PWD:/md peterdavehello/markdownlint markdownlint --ignore vendor --ignore LICENSE.md '**/*.md'
+task ddev:start
 ```
 
-## Code analysis
-
-We use [PHPStan](https://phpstan.org/) for static code analysis.
-
-Running static code analysis on a standalone Drupal module is a bit tricky, so we advise
-running it via your main OS2Forms Drupal project.
-
-To do so, copy the entire module folder into `web/sites/default/modules`, clear the cache and run:
-
-```shell
-docker compose exec phpfpm php vendor/bin/phpstan --configuration=web/sites/default/modules/os2forms_get_organized/phpstan.neon
-```
-
-Assuming your php container is named `phpfpm`.
+Run `task` to see other useful development tasks including coding standards and checks.

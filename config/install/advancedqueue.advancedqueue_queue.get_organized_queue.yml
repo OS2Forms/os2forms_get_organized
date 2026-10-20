@@ -1,8 +1,8 @@
 langcode: da
 status: true
-dependencies: {  }
+dependencies: {}
 id: get_organized_queue
-label: 'Get Organized Queue'
+label: "Get Organized Queue"
 backend: database
 backend_configuration:
   lease_time: 300

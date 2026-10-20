@@ -30,12 +30,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * )
  */
 class GetOrganizedWebformHandler extends WebformHandlerBase {
-  /**
-   * The submission logger.
-   *
-   * @var \Drupal\Core\Logger\LoggerChannelInterface
-   */
-  protected LoggerChannelInterface $submissionLogger;
   private const string ADDITIONAL = 'additional';
   private const string STATES = 'states';
 
@@ -44,7 +38,18 @@ class GetOrganizedWebformHandler extends WebformHandlerBase {
    *
    * @phpstan-param array<string, mixed> $configuration
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, LoggerChannelFactoryInterface $loggerFactory, ConfigFactoryInterface $configFactory, RendererInterface $renderer, EntityTypeManagerInterface $entityTypeManager, WebformSubmissionConditionsValidatorInterface $conditionsValidator, WebformTokenManagerInterface $tokenManager) {
+  public function __construct(
+    array $configuration,
+    $plugin_id,
+    $plugin_definition,
+    LoggerChannelFactoryInterface $loggerFactory,
+    ConfigFactoryInterface $configFactory,
+    RendererInterface $renderer,
+    EntityTypeManagerInterface $entityTypeManager,
+    WebformSubmissionConditionsValidatorInterface $conditionsValidator,
+    WebformTokenManagerInterface $tokenManager,
+    protected LoggerChannelInterface $submissionLogger
+  ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->setConfiguration($configuration);
     $this->loggerFactory = $loggerFactory;
@@ -53,7 +58,6 @@ class GetOrganizedWebformHandler extends WebformHandlerBase {
     $this->entityTypeManager = $entityTypeManager;
     $this->conditionsValidator = $conditionsValidator;
     $this->tokenManager = $tokenManager;
-    $this->submissionLogger = $loggerFactory->get('webform_submission');
   }
 
   /**
@@ -71,7 +75,8 @@ class GetOrganizedWebformHandler extends WebformHandlerBase {
       $container->get('renderer'),
       $container->get('entity_type.manager'),
       $container->get('webform_submission.conditions_validator'),
-      $container->get('webform.token_manager')
+      $container->get('webform.token_manager'),
+      $container->get('logger.channel.webform_submission')
     );
   }
 
@@ -258,6 +263,7 @@ class GetOrganizedWebformHandler extends WebformHandlerBase {
    * {@inheritdoc}
    *
    * @phpstan-param array<string, mixed> $form
+   * @phpstan-param-out array<mixed> $form
    */
   public function submitConfigurationForm(array &$form, FormStateInterface $form_state): void {
     parent::submitConfigurationForm($form, $form_state);
@@ -280,6 +286,7 @@ class GetOrganizedWebformHandler extends WebformHandlerBase {
    * {@inheritdoc}
    *
    * @phpstan-param array<string, mixed> $form
+   * @phpstan-param-out array<mixed> $form
    */
   public function validateConfigurationForm(array &$form, FormStateInterface $form_state): void {
     parent::validateConfigurationForm($form, $form_state);
@@ -342,13 +349,9 @@ class GetOrganizedWebformHandler extends WebformHandlerBase {
    * @phpstan-return array<string, mixed>
    */
   private function getAvailableElementsByType(array $types, array $elements): array {
-    $attachmentElements = array_filter($elements, function ($element) use ($types) {
-        return in_array($element['#type'], $types);
-    });
+    $attachmentElements = array_filter($elements, fn($element) => in_array($element['#type'], $types));
 
-    return array_map(function ($element) {
-        return $element['#title'];
-    }, $attachmentElements);
+    return array_map(fn($element) => $element['#title'], $attachmentElements);
   }
 
 }
